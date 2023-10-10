@@ -1,5 +1,23 @@
-import { Package2, LayoutDashboard } from "lucide-react";
+import { Package2, LayoutDashboard, Utensils } from "lucide-react";
 import { NavLink } from "react-router-dom";
+
+const sidebarMenu = [
+  {
+    directTo: "/",
+    icons: <LayoutDashboard size={19} />,
+    text: "Main dashboard"
+  },
+  {
+    directTo: "/stock",
+    icons: <Package2 size={19} />,
+    text: "Manage Stock"
+  },
+  {
+    directTo: "/menu",
+    icons: <Utensils size={19} />,
+    text: "Menu"
+  }
+];
 
 export default function Sidebar() {
   const renderSymbol = (
@@ -9,21 +27,17 @@ export default function Sidebar() {
   );
 
   return (
-    <nav className='w-[18%] bg-white border border-gray-100'>
+    <aside className='w-[320px]  bg-   border border-gray-100'>
       {renderSymbol}
       <div className='flex mt-3 gap-3 flex-col justify-center items-center'>
-        <ButtonSidebar
-          directTo='/'
-          icons={<LayoutDashboard size={19} />}
-          text='Main dashboard'
-        />
-        <ButtonSidebar
-          directTo='/stock'
-          icons={<Package2 size={19} />}
-          text='Stock'
-        />
+        {sidebarMenu.map((menu, index) => (
+          <ButtonSidebar
+            key={index}
+            {...menu}
+          />
+        ))}
       </div>
-    </nav>
+    </aside>
   );
 }
 
@@ -47,7 +61,7 @@ const ButtonSidebar: React.FC<TPropButtonSidebar> = (prop) => {
     >
       <div className='flex gap-3 items-center'>
         {icons}
-        <span>{text}</span>
+        <span className='text-lg'>{text}</span>
       </div>
     </NavLink>
   );

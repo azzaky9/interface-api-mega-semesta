@@ -11,7 +11,7 @@ const dummyMenu = [
 ];
 
 function MenuList() {
-  const {} = useSources();
+  const { getValueOfCollection } = useSources();
 
   const [dataMenu, setDataMenu] = useState(dummyMenu);
 
@@ -32,6 +32,8 @@ function MenuList() {
 
     setDataMenu(modifiedMenu);
   };
+
+  getValueOfCollection()
 
   return (
     <div>

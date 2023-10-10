@@ -5,7 +5,7 @@ export default function RootLayouts() {
   return (
     <div className='flex flex-row w-full h-screen'>
       <Sidebar />
-      <main className="w-full px-5 py-20 " >
+      <main className='w-full bg-gray-100  '>
         <Outlet />
       </main>
     </div>

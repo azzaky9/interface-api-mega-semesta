@@ -1,34 +1,28 @@
-import { createContext, useContext, useState } from "react";
-import type { Customer, Order, TSetStates } from "../types/types";
+import { createContext, useContext, useReducer, useState } from "react";
+import { ACTIONTYPE, reducer, initialState } from "../reducer/orderReducer";
+import type { ReducerInitialState } from "../types/types";
 
-type OrderList = Order[];
+type TOrderContext = {
+  state: ReducerInitialState;
+  dispatch: React.Dispatch<ACTIONTYPE>;
+};
 
-interface TInitialOrderContext {
-  customer: Customer | null;
-  setCustomer: TSetStates<Customer | null>;
-  orderList: OrderList;
-  setOrderList: TSetStates<OrderList>;
-}
-
-const OrderContext = createContext({} as TInitialOrderContext);
+const OrderContext = createContext({} as TOrderContext);
 
 interface TPropOrderProvider {
   children: React.ReactNode;
 }
 
 const OrderProvider: React.FC<TPropOrderProvider> = ({ children }) => {
-  const [currentCustomer, setCurrentCustomer] = useState<Customer | null>(null);
-  const [orderList, setOrderList] = useState<OrderList>([]);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  const initial: TInitialOrderContext = {
-    customer: currentCustomer,
-    setCustomer: setCurrentCustomer,
-    orderList,
-    setOrderList
+  const value = {
+    state,
+    dispatch
   };
 
   return (
-    <OrderContext.Provider value={initial}>{children}</OrderContext.Provider>
+    <OrderContext.Provider value={value}>{children}</OrderContext.Provider>
   );
 };
 
