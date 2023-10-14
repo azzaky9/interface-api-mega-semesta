@@ -7,6 +7,11 @@
   font-family: "Poppins", sans-serif;
 }
 
+a {
+  text-decoration: none !important;
+  color: black;
+}
+
 body {
   @apply bg-gray-50 h-screen w-full;
 }

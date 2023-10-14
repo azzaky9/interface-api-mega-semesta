@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Card, CardBody, CardHeader } from "reactstrap";
-import { useSources } from "../../hooks/useSources";
 
 const dummyMenu = [
   { id: "0", name: "Nugget Goreng", isChoosen: false, qty: 0 },
@@ -11,8 +10,6 @@ const dummyMenu = [
 ];
 
 function MenuList() {
-  const { getValueOfCollection } = useSources();
-
   const [dataMenu, setDataMenu] = useState(dummyMenu);
 
   const chooseMenuById = (menuId: string) => {
@@ -32,8 +29,6 @@ function MenuList() {
 
     setDataMenu(modifiedMenu);
   };
-
-  getValueOfCollection()
 
   return (
     <div>

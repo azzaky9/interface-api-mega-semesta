@@ -4,19 +4,21 @@ import { type Switches } from "../OrderForm";
 import { TSetStates } from "../../../types/types";
 
 type Props = {
-  isHotelGuest: Switches;
-  setIsHotelGuest: TSetStates<Switches>;
+  isActive: Switches;
+  setIsActive: TSetStates<Switches>;
+  changeHandler: (e: ChangeEvent<HTMLInputElement>) => void;
+  toggleModel: "checkbox" | "switch";
 };
 
-const SwitchTypeGuest: React.FC<Props> = (props) => {
-  const { isHotelGuest, setIsHotelGuest } = props;
+const OnOffToggler: React.FC<Props> = (props) => {
+  const { isActive, setIsActive, toggleModel, changeHandler } = props;
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const eValue = e.target.value as Switches;
-    const setValue = eValue === "on" ? "off" : "on";
+  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const eValue = e.target.value as Switches;
+  //   const setValue = eValue === "on" ? "off" : "on";
 
-    setIsHotelGuest(setValue as Switches);
-  };
+  //   setIsActive(setValue as Switches);
+  // };
 
   return (
     <FormGroup
@@ -24,16 +26,16 @@ const SwitchTypeGuest: React.FC<Props> = (props) => {
       switch
     >
       <Input
-        value={isHotelGuest}
+        value={isActive}
         className='hover:cursor-pointer'
-        type='switch'
-        role='switch'
-        id="switch-guest"
-        name="switch-guest"
-        onChange={handleChange}
+        type={toggleModel}
+        role={toggleModel}
+        id='switch-guest'
+        name='switch-guest'
+        onChange={changeHandler}
       />
       <Label
-        for="switch-guest"
+        for='switch-guest'
         className='text-sm'
         check
       >
@@ -43,4 +45,4 @@ const SwitchTypeGuest: React.FC<Props> = (props) => {
   );
 };
 
-export default SwitchTypeGuest;
+export default OnOffToggler;

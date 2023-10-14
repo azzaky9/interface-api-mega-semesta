@@ -1,4 +1,5 @@
 import { SetStateAction, Dispatch } from "react";
+import { AddNewMenuForm } from "../context/MenuContext";
 
 type Customer = {
   customerNames: string;
@@ -13,6 +14,12 @@ type Order = {
   price: number;
 };
 
+type Category = "baverage" | "foods" | "minibar" | "etc";
+
+interface DataRequest extends AddNewMenuForm {
+  id: string;
+}
+
 type TSetStates<T> = Dispatch<SetStateAction<T>>;
 
 type OrderList = Order[];
@@ -23,4 +30,12 @@ interface ReducerInitialState {
   currentPosition: "register" | "choosen-option";
 }
 
-export type { Customer, Order, OrderList, TSetStates, ReducerInitialState };
+export type {
+  Category,
+  Customer,
+  Order,
+  OrderList,
+  TSetStates,
+  ReducerInitialState,
+  DataRequest
+};

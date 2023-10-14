@@ -1,7 +1,7 @@
 import { FormFeedback } from "reactstrap";
 
 interface PropsDisplayError {
-  message: string;
+  message: any;
 }
 
 export default function DisplayError({ message }: PropsDisplayError) {
