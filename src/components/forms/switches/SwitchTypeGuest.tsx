@@ -11,14 +11,8 @@ type Props = {
 };
 
 const OnOffToggler: React.FC<Props> = (props) => {
-  const { isActive, setIsActive, toggleModel, changeHandler } = props;
+  const { isActive,  toggleModel, changeHandler } = props;
 
-  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const eValue = e.target.value as Switches;
-  //   const setValue = eValue === "on" ? "off" : "on";
-
-  //   setIsActive(setValue as Switches);
-  // };
 
   return (
     <FormGroup

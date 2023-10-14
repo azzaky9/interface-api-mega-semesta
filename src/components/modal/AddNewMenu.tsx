@@ -26,7 +26,7 @@ export default function AddNewMenu(prop: PropAddNewMenu & ModalProps) {
     >
       <ModalHeader toggle={toggleModal}>Tambah menu baru</ModalHeader>
       <ModalBody className='bg-gray-50'>
-        <NewMenuForm />
+        <NewMenuForm handleClose={handleClose!} />
       </ModalBody>
       <ModalFooter></ModalFooter>
     </Modal>
