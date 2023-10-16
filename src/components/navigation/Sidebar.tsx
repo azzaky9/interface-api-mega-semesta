@@ -27,7 +27,7 @@ export default function Sidebar() {
   );
 
   return (
-    <aside className='w-[320px]  bg-   border border-gray-100'>
+    <aside className='w-[320px] bg-white border-r-2 border-gray-400'>
       {renderSymbol}
       <div className='flex mt-3 gap-3 flex-col justify-center items-center'>
         {sidebarMenu.map((menu, index) => (

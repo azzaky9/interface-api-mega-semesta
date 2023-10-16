@@ -5,7 +5,7 @@ type PropButtonWithIcon = {
   icon: JSX.Element;
 };
 
-export default function ButtonWithIcon(prop: PropButtonWithIcon & ButtonProps) {
+export default function ButtonWithIcon(prop: Partial<PropButtonWithIcon> & ButtonProps) {
   const { icon, text } = prop;
 
   return (

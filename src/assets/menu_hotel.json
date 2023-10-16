@@ -1,0 +1,598 @@
+{
+  "foods": [
+    {
+      "name": "Nasi Goreng Telur",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Nasi Goreng Special",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 25000
+    },
+    {
+      "name": "Nasi Uduk Telur Sambel",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 30000
+    },
+    {
+      "name": "Nasi Uduk Special",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 30000
+    },
+    {
+      "name": "Paket Nasi Sop Ayam",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 35000
+    },
+    {
+      "name": "Paket Nasi Brokoli Ayam",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 35000
+    },
+    {
+      "name": "Paket Nasi Cap Cay",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 35000
+    },
+    {
+      "name": "Paket Nasi Sambel Teri Tumis Buncis + Wartel",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 35000
+    },
+    {
+      "name": "Paket Nasi Kari Ayam",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 35000
+    },
+    {
+      "name": "Paket Nasi Cap Cai + Teri Sambel",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 35000
+    },
+    {
+      "name": "Paket Nasi Telur Sambel /Dadar/Matasapi + Capcai",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 35000
+    },
+    {
+      "name": "Paket Nasi Sambel Udang Pete + Tumis Buncis Wartel",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 35000
+    },
+    {
+      "name": "Paket Nasi Sayur Bening Sambel Udang",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 35000
+    },
+    {
+      "name": "Indomi Goreng Telur",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Indomi Goreng Special",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 25000
+    },
+    {
+      "name": "Indomi Kuah Telur",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Indomi Kuah Telur + Ayam",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 25000
+    },
+    {
+      "name": "Ifumi Goreng Telur",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Ifumi Goreng Special",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 25000
+    },
+    {
+      "name": "Mihun Goreng Telur",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Mihun Goreng Special",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 25000
+    },
+    {
+      "name": "Mitiau Goreng Telur",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Mitiau Goreng Special",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 25000
+    },
+    {
+      "name": "Nugget Goreng 5 pcs",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Sosis Goreng 3 pcs",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Kentang Goreng",
+      "category": "foods",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    }
+  ],
+  "baverage": [
+    {
+      "name": "Teh Manis Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 10000
+    },
+    {
+      "name": "Teh Tawar Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 10000
+    },
+    {
+      "name": "Kopi Cup Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 15000
+    },
+    {
+      "name": "Kopi Gelas Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Susu Cup Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 15000
+    },
+    {
+      "name": "Susu Gelas Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Kopi Susu Cup Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 15000
+    },
+    {
+      "name": "Kopi Susu Gelas Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Milo Cup Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 15000
+    },
+    {
+      "name": "Milo Gelas Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Kopi Luwak Cup",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Kopi Luwak Gelas Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Nescafe/Coffee Mix",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Nescafe/Coffee Mix Dingin/Panas",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 20000
+    },
+    {
+      "name": "Aqua 600 ml",
+      "category": "baverage",
+      "groupMenu": "Tamu Hotel",
+      "price": 5000
+    }
+  ],
+  "rokok": [
+    {
+      "name": "Sempurna",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 40000
+    },
+    {
+      "name": "Club Mild",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 35000
+    },
+    {
+      "name": "Gudang Garam Merah",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 30000
+    },
+    {
+      "name": "Gudang Garam International",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 40000
+    },
+    {
+      "name": "Magnum",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 30000
+    },
+    {
+      "name": "LA",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 40000
+    },
+    {
+      "name": "Dji Sam Soe",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 30000
+    },
+    {
+      "name": "Marlboro Putih",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 45000
+    },
+    {
+      "name": "Marlboro Merah",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 45000
+    },
+    {
+      "name": "Marlboro Ice Blast",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 45000
+    },
+    {
+      "name": "Marlboro Mentol Light",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 45000
+    },
+    {
+      "name": "Marlboro Black Menthol",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 45000
+    },
+    {
+      "name": "Gudang Garam",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 40000
+    },
+    {
+      "name": "Lucky Strike",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 35000
+    },
+    {
+      "name": "Jarum Black",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 40000
+    },
+    {
+      "name": "Jarum Super",
+      "category": "rokok",
+      "groupMenu": "Incharge",
+      "price": 30000
+    }
+  ],
+  "store": [
+    {
+      "name": "Mancis",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 5000
+    },
+    {
+      "name": "Shampo Saset",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 3000
+    },
+    {
+      "name": "Minyak Kayu Putih Kecil",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 20000
+    },
+    {
+      "name": "Minyak Kayu Putih Besar",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 30000
+    },
+    {
+      "name": "Biore Pink",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 35000
+    },
+    {
+      "name": "Biore Biru",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 35000
+    },
+    {
+      "name": "Sabun Cair LifeBuoy",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    },
+    {
+      "name": "Men Biore Body Foam",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    },
+    {
+      "name": "Shampo Sunslik",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    },
+    {
+      "name": "Shampo Pantene",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    },
+    {
+      "name": "Shampo Zinc",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    },
+    {
+      "name": "Shampo Emeron",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    },
+    {
+      "name": "Shampo LifeBuoy",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    },
+    {
+      "name": "Shampo Head & Shoulders",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    },
+    {
+      "name": "Bedak Caladine",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 20000
+    },
+    {
+      "name": "Bedak Codomo",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 20000
+    },
+    {
+      "name": "Bedak Johnson Kecil",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 20000
+    },
+    {
+      "name": "Bedak Johnson Besar",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 20000
+    },
+    {
+      "name": "Bedak My Baby",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 15000
+    },
+    {
+      "name": "Bedak Cushion",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 20000
+    },
+    {
+      "name": "Odol",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 5000
+    },
+    {
+      "name": "Sikat Gigi",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 5000
+    },
+    {
+      "name": "Mami Poko Semua Ukuran",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 30000
+    },
+    {
+      "name": "Protex Hijau & Biru",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 15000
+    },
+    {
+      "name": "Laurier Active",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 15000
+    },
+    {
+      "name": "Laurier Relax Night",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    },
+    {
+      "name": "Sabun Fress",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 5000
+    },
+    {
+      "name": "Biore Whitening Scrube",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 35000
+    },
+    {
+      "name": "Sabun Shinzui",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 10000
+    },
+    {
+      "name": "Sabun Lux Botol",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    },
+    {
+      "name": "Ponds Clear Solution",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 35000
+    },
+    {
+      "name": "Ponds White Beauty",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 35000
+    },
+    {
+      "name": "Conditioner Sunslik",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 20000
+    },
+    {
+      "name": "Conditioner Pantene",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 20000
+    },
+    {
+      "name": "Pisau Cukur",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 15000
+    },
+    {
+      "name": "Zinc Sacet",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 3000
+    },
+    {
+      "name": "Nuvo",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 10000
+    },
+    {
+      "name": "Sari Ayu",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 35000
+    },
+    {
+      "name": "Fair & Lovely",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 30000
+    },
+    {
+      "name": "Shampo Sunslik Kuning",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    },
+    {
+      "name": "Shampo Pantene Fullness",
+      "category": "store",
+      "groupMenu": "Incharge",
+      "price": 25000
+    }
+  ]
+}

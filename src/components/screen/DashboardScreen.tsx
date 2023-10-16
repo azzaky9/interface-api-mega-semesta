@@ -11,22 +11,6 @@ export default function DashboardScreen() {
 
   const { dispatch, state } = useOrder();
 
-  const getComponentByPosition = (
-    position: ReducerInitialState["currentPosition"]
-  ) => {
-    switch (position) {
-      case "register":
-        return <OrderForm ref={ref} />;
-      case "choosen-option":
-        return (
-          <div className="flex gap-3" >
-            <MenuList />
-            <PreviewOrderCard />
-          </div>
-        );
-    }
-  };
-
   const changePosition = () => {
     const togglingPosition =
       state.currentPosition === "choosen-option"
@@ -39,10 +23,34 @@ export default function DashboardScreen() {
     });
   };
 
+  const getComponentByPosition = (
+    position: ReducerInitialState["currentPosition"]
+  ) => {
+    switch (position) {
+      case "register":
+        return (
+          <OrderForm
+            changePosition={changePosition}
+            ref={ref}
+          />
+        );
+      case "choosen-option":
+        return (
+          <div className='px-5 grid py-10 grid-cols-5 gap-5'>
+            <MenuList />
+            <PreviewOrderCard />
+          </div>
+        );
+    }
+  };
+
   return (
-    <div className='h-full grid place-content-center '>
+    <div
+      className={`h-full grid ${
+        state.currentPosition === "choosen-option" ? "" : "place-content-center"
+      }`}
+    >
       {getComponentByPosition(state.currentPosition)}
-      <button onClick={changePosition}>Next</button>
     </div>
   );
 }

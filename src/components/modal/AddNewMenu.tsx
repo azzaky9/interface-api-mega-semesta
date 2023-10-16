@@ -6,6 +6,8 @@ import {
   ModalFooter
 } from "reactstrap";
 import NewMenuForm from "../forms/NewMenuForm";
+// import { useMenu } from "../../context/MenuContext";
+// import useInputMenu from "../../hooks/useInputMenu";
 
 type PropAddNewMenu = {
   isOpen: boolean;
@@ -16,6 +18,7 @@ type PropAddNewMenu = {
 
 export default function AddNewMenu(prop: PropAddNewMenu & ModalProps) {
   const { isOpen, toggleModal, handleClose, handleOpen, ...args } = prop;
+  // const { addManyMenuFromJson } = useInputMenu();
 
   return (
     <Modal
@@ -30,5 +33,5 @@ export default function AddNewMenu(prop: PropAddNewMenu & ModalProps) {
       </ModalBody>
       <ModalFooter></ModalFooter>
     </Modal>
-  );
+  );  
 }

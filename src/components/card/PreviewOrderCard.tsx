@@ -5,17 +5,11 @@ import {
   CardTitle,
   CardText,
   Button,
-  CardFooter
 } from "reactstrap";
 
 export default function PreviewOrderCard() {
   return (
-    <Card
-      className='my-2'
-      style={{
-        width: "18rem"
-      }}
-    >
+    <Card className='my-2 col-span-2 w-[80%] h-[62%]'>
       <CardHeader>Header</CardHeader>
       <CardBody>
         <CardTitle tag='h5'>Special Title Treatment</CardTitle>
@@ -24,7 +18,6 @@ export default function PreviewOrderCard() {
         </CardText>
         <Button>Go somewhere</Button>
       </CardBody>
-      <CardFooter>Footer</CardFooter>
     </Card>
   );
 }

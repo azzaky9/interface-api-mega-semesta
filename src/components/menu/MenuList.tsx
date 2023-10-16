@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Card, CardBody, CardHeader } from "reactstrap";
+import { useOrder } from "../../context/OrderContext";
 
 const dummyMenu = [
   { id: "0", name: "Nugget Goreng", isChoosen: false, qty: 0 },
@@ -10,6 +11,10 @@ const dummyMenu = [
 ];
 
 function MenuList() {
+  const { state } = useOrder();
+
+  console.log(state.customer);
+
   const [dataMenu, setDataMenu] = useState(dummyMenu);
 
   const chooseMenuById = (menuId: string) => {
@@ -31,26 +36,37 @@ function MenuList() {
   };
 
   return (
-    <div>
-      <Card>
-        <CardHeader>List Menu</CardHeader>
-        <CardBody>
-          <div className='flex gap-3 flex-wrap'>
-            {dataMenu.map((menu, index) => (
-              <span
-                onClick={() => chooseMenuById(menu.id)}
-                className={`px-3 py-2 border-2 text-sm border-gray-200 hover:cursor-pointer rounded-md ${
-                  menu.isChoosen ? " border-blue-500" : ""
-                }`}
-                key={index}
-              >
-                {menu.name}
-              </span>
-            ))}
-          </div>
-        </CardBody>
-      </Card>
-    </div>
+    <Card className='col-span-3'>
+      <CardHeader>List Menu</CardHeader>
+      <CardBody>
+        <div className='flex gap-3 flex-wrap'>
+          {dataMenu.map((menu, index) => (
+            <span
+              onClick={() => chooseMenuById(menu.id)}
+              className={`px-3 py-2 border-2 text-sm border-gray-200 hover:cursor-pointer rounded-md ${
+                menu.isChoosen ? " border-blue-500" : ""
+              }`}
+              key={index}
+            >
+              {menu.name}
+            </span>
+          ))}
+        </div>
+        <div className='flex gap-3 flex-wrap'>
+          {dataMenu.map((menu, index) => (
+            <span
+              onClick={() => chooseMenuById(menu.id)}
+              className={`px-3 py-2 border-2 text-sm border-gray-200 hover:cursor-pointer rounded-md ${
+                menu.isChoosen ? " border-blue-500" : ""
+              }`}
+              key={index}
+            >
+              {menu.name}
+            </span>
+          ))}
+        </div>
+      </CardBody>
+    </Card>
   );
 }
 

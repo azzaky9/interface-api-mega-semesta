@@ -1,10 +1,11 @@
-import { ChangeEvent} from "react";
+import { ChangeEvent } from "react";
 import { SubmitHandler } from "react-hook-form";
-import { Form, FormGroup, Label, Input, Button, Spinner } from "reactstrap";
+import { Form, FormGroup, Label, Input } from "reactstrap";
 import { useMenu } from "../../context/MenuContext";
 import { AddNewMenuForm } from "../../context/MenuContext";
 import useInputMenu from "../../hooks/useInputMenu";
 import { useFormsHelper } from "../../helpers/useFormHelper";
+import LoadingButton from "../buttons/LoadingButton";
 import DisplayError from "../utils/DisplayError";
 
 const categories = ["foods", "baverage", "minibar", "etc"];
@@ -15,7 +16,7 @@ type Props = {
 };
 
 export default function NewMenuForm({ handleClose }: Props) {
-  const { formUtilities } = useMenu();
+  const { formUtilities, menuDataQ } = useMenu();
   const { generateUniqueId, insertMenu } = useInputMenu();
   const { getErr } = useFormsHelper();
   // const { handleChange, isActive, setIsActive } = useSwitch();
@@ -78,6 +79,8 @@ export default function NewMenuForm({ handleClose }: Props) {
       insertType: value.category
     });
 
+    await menuDataQ.refetch();
+
     handleClose();
 
     setTimeout(() => {
@@ -86,7 +89,7 @@ export default function NewMenuForm({ handleClose }: Props) {
   };
 
   const clearAllState = () => {
-    const listValuetoClear = ["name", "category", "groupMenu", "price"];
+    const listValuetoClear = ["name", "price"];
 
     listValuetoClear.forEach((clearName) => {
       setValue(clearName as keyof AddNewMenuForm, "");
@@ -192,22 +195,13 @@ export default function NewMenuForm({ handleClose }: Props) {
         />
         {shortenDisplayErr("price")}
       </FormGroup>
-      <Button
-        disabled={insertMenu.isLoading}
-        className='mt-5 '
-        color='primary'
+      <LoadingButton
+        color='success'
+        className='mt-5'
         type='submit'
         onClick={() => handleSubmit(onsubmit)}
-      >
-        {insertMenu.isLoading && (
-          <Spinner
-            size='sm'
-            className='me-2'
-          />
-        )}
-
-        <span>Submit</span>
-      </Button>
+        isloading={String(insertMenu.isLoading)}
+      />
       {""}
     </Form>
   );

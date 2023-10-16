@@ -16,10 +16,15 @@ type onChange<T> = (e: ChangeEvent<HTMLInputElement>, setValueName: T) => void;
 
 type Ref = Form;
 
-const OrderForm = React.forwardRef<Ref, any>(function OrderForm(_, ref) {
+type Props  = {
+  changePosition: () => void
+}
+
+const OrderForm = React.forwardRef<Ref, Props>(function OrderForm(props, ref) {
   const { dispatch } = useOrder();
   const { isActive, handleChange, setIsActive } = useSwitch();
   const { getErr } = useFormsHelper()
+  const { changePosition } = props
 
   const t = useForm<OrderForm>();
   const {
@@ -35,6 +40,8 @@ const OrderForm = React.forwardRef<Ref, any>(function OrderForm(_, ref) {
       type: "UPDATE_CUSTOMER",
       payload: value
     });
+
+    changePosition()
   };
 
   const changeHandler: onChange<keyof OrderForm> = (e, setValueName) => {

@@ -4,24 +4,33 @@ import { DataRequest } from "../types/types";
 import { v4 as uuid } from "uuid";
 import { enqueueSnackbar } from "notistack";
 import { useMutation } from "react-query";
+import menuHotelsJson from "../assets/menu_hotel.json";
+import { useMenu } from "../context/MenuContext";
 
-type InsertEnumType = "foods" | "baverage" | "minibar" | "etc";
+export type InsertEnumType = "foods" | "baverage" | "minibar" | "etc";
 
 type RequestRequirementArg = {
   insertType: InsertEnumType;
   data: DataRequest;
 };
 
-type RequestDeleteArg = {
-  deleteFromList: InsertEnumType;
-  id: string;
+type MenuHotelSchema = {
+  name: string;
+  category: string;
+  groupMenu: string;
+  price: number;
 };
 
+// type RequestDeleteArg = {
+//   deleteFromList: InsertEnumType;
+// };
+
 const useInputMenu = () => {
+  const { menuData } = useMenu();
+
   const generateUniqueId = () => {
     const uid = uuid().split("-")[0];
 
-    console.log(uid);
     return uid;
   };
 
@@ -50,17 +59,39 @@ const useInputMenu = () => {
     }
   });
 
+  const getSelectionMenu = () => {
+    const selections = menuData?.nodes.map((node) => {
+      const { category, groupMenu, id, name, price, isComplete } = node;
+
+      if (isComplete) {
+        return { category, groupMenu, id, name, price };
+      }
+    }) as DataRequest[];
+
+    return selections.filter((selection) => selection);
+  };
+
+  const deleteMenuByCategory = async (data: DataRequest) => {
+    const docRef = doc(db, "menu_collection", data.category);
+
+    await updateDoc(docRef, {
+      list_menu: arrayRemove(data)
+    });
+  };
+
   const deleteMenu = useMutation({
     mutationKey: ["delete-menu"],
-    mutationFn: async (dataDelete: RequestDeleteArg) => {
+    mutationFn: async () => {
       try {
-        const ref = doc(db, "menu_collection", dataDelete.deleteFromList);
+        const selectionMenu = getSelectionMenu();
 
-        await updateDoc(ref, {
-          list_menu: arrayRemove({
-            id: dataDelete.id
-          })
-        });
+        for (let index = 0; index < selectionMenu.length; index++) {
+          const dataToDelete = selectionMenu[index];
+
+          deleteMenuByCategory(dataToDelete);
+        }
+
+        console.log("[selection]", selectionMenu);
 
         enqueueSnackbar({
           variant: "success",
@@ -77,9 +108,60 @@ const useInputMenu = () => {
     }
   });
 
+  const binduidtoArr = (datatoBind: MenuHotelSchema[]) => {
+    const afterBind = datatoBind.map((data) => {
+      return { id: generateUniqueId(), ...data };
+    });
+
+    return afterBind;
+  };
+
+  const addManyMenuFromJson = useMutation({
+    mutationKey: ["adding-many-menu"],
+    mutationFn: async () => {
+      try {
+        const insertMenus = async (values: MenuHotelSchema[], key: string) => {
+          const ref = doc(db, "menu_collection", key);
+
+          const bindidEach = binduidtoArr(values);
+
+          await updateDoc(ref, {
+            list_menu: bindidEach
+          });
+        };
+
+        Object.entries(menuHotelsJson).forEach(([key, value]) => {
+          insertMenus(value, key);
+        });
+        const docsRef = doc(db, "menu_collection", "foods");
+        const baverageRef = doc(db, "menu_collection", "baverage");
+
+        const bindIdBaverage = menuHotelsJson.baverage.map((value) => {
+          return { id: generateUniqueId(), ...value };
+        });
+
+        await updateDoc(baverageRef, {
+          list_menu: bindIdBaverage
+        });
+
+        const bindIdFoods = menuHotelsJson.foods.map((value) => {
+          return { id: generateUniqueId(), ...value };
+        });
+
+        await updateDoc(docsRef, {
+          list_menu: bindIdFoods
+        });
+
+        console.log("success to create all");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  });
+
   // on development
 
-  return { insertMenu, deleteMenu, generateUniqueId };
+  return { insertMenu, deleteMenu, generateUniqueId, addManyMenuFromJson };
 };
 
 export default useInputMenu;
