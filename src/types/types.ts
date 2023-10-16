@@ -8,13 +8,13 @@ type Customer = {
 };
 
 type Order = {
-  id: number;
+  id: string;
   name: string;
-  isChoosen: boolean;
   price: number;
+  qty: number
 };
 
-type Category = "baverage" | "foods" | "minibar" | "etc";
+type Category = "baverage" | "foods" | "minibar" | "rokok" | "store";
 
 interface DataRequest extends AddNewMenuForm {
   id: string;

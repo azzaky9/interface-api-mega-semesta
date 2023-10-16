@@ -63,9 +63,9 @@ const TableMenu = () => {
         return (
           <div className='w-[44px] grid place-content-center'>
             <Input
-              checked={item.isComplete}
+              checked={item.isSelect}
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                handleUpdate(event.target.checked, item.id, "isComplete");
+                handleUpdate(event.target.checked, item.id, "isSelect");
               }}
               type='checkbox'
               className='my-3 border-gray-400 hover:cursor-pointer'

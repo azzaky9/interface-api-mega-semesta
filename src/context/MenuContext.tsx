@@ -21,7 +21,7 @@ type AddNewMenuForm = {
 
 export interface MenuEditableSchema extends MenuSchema {
   no: number;
-  isComplete: boolean;
+  isSelect: boolean;
 }
 
 export interface MenuState {
@@ -54,7 +54,7 @@ const MenuProvider: React.FC<PropsMenuProvider> = ({ children }) => {
     }
   });
 
-  console.log(menuData)
+  // console.log(menuData)
 
   const menuDataQ = useQuery({
     queryKey: ["list-menu"],
@@ -79,7 +79,7 @@ const MenuProvider: React.FC<PropsMenuProvider> = ({ children }) => {
           .map((a, index) => ({
             ...a,
             no: index + 1,
-            isComplete: false
+            isSelect: false
           })) as MenuEditableSchema[];
 
         setMenuData({ nodes });

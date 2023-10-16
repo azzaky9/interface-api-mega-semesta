@@ -13,7 +13,7 @@ export default function ControlMenu({ handleOpen }: PropControlMenu) {
   const { menuData, menuDataQ } = useMenu();
 
   // const isSelectionEmpty = deletingMenus.length === 0;
-  const isDataMenuSelected = menuData?.nodes.filter((node) => node.isComplete);
+  const isDataMenuSelected = menuData?.nodes.filter((node) => node.isSelect);
 
   console.log(isDataMenuSelected);
 
@@ -32,18 +32,22 @@ export default function ControlMenu({ handleOpen }: PropControlMenu) {
         onClick={() => {
           addManyMenuFromJson.mutate();
         }}
-        defaulticon={<FileStack size={17} />}
+        defaulticon={<></>}
         isloading={String(addManyMenuFromJson.isLoading)}
         text='Create Many'
       /> */}
-      <LoadingButton
-        disabled={isDataMenuSelected?.length === 0}
-        color={isDataMenuSelected?.length === 0 ? "secondary" : "danger"}
-        onClick={() => deleteMenu.mutateAsync().then(() => menuDataQ.refetch())}
-        defaulticon={<Trash2 size={17} />}
-        isloading={String(false)}
-        text='Delete Selection Menu'
-      />
+      {!menuDataQ.isLoading && (
+        <LoadingButton
+          disabled={isDataMenuSelected?.length === 0}
+          color={isDataMenuSelected?.length === 0 ? "secondary" : "danger"}
+          onClick={() =>
+            deleteMenu.mutateAsync().then(() => menuDataQ.refetch())
+          }
+          defaulticon={<Trash2 size={17} />}
+          isloading={String(false)}
+          text='Delete Selection Menu'
+        />
+      )}
     </div>
   );
 }

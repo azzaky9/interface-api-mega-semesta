@@ -1,71 +1,84 @@
-import { useState } from "react";
-import { Card, CardBody, CardHeader } from "reactstrap";
+import { Button, Card, CardHeader } from "reactstrap";
+import {
+  Category,
+  DataRequest as MenuDataState,
+  Order
+} from "../../types/types";
 import { useOrder } from "../../context/OrderContext";
+import { useState } from "react";
+import CheckboxCategory from "../forms/switches/CheckboxCategory";
 
-const dummyMenu = [
-  { id: "0", name: "Nugget Goreng", isChoosen: false, qty: 0 },
-  { id: "1", name: "Nasi Liwet", isChoosen: false, qty: 0 },
-  { id: "2", name: "Aqua Botol", isChoosen: false, qty: 0 },
-  { id: "3", name: "Nasi Goreng Spc", isChoosen: false, qty: 0 },
-  { id: "4", name: "Nasi Goreng Telur", isChoosen: false, qty: 0 }
-];
+type Props = {
+  dataMenu: MenuDataState[];
+};
 
-function MenuList() {
-  const { state } = useOrder();
+export type CategoryIncAll = Category | "all";
 
-  console.log(state.customer);
+function MenuList(props: Props) {
+  const { dispatch, state } = useOrder();
+  const { dataMenu } = props;
 
-  const [dataMenu, setDataMenu] = useState(dummyMenu);
+  const [filterBy, setFilterBy] = useState<CategoryIncAll>("all");
 
-  const chooseMenuById = (menuId: string) => {
-    const copyDataMenu = [...dataMenu];
-
-    const modifiedMenu = copyDataMenu.map((menu) => {
-      if (menuId === menu.id) {
-        return {
-          ...menu,
-          isChoosen: !menu.isChoosen,
-          qty: menu.isChoosen ? 0 : 1
-        };
-      }
-
-      return { ...menu };
+  const filterByMenu = (category: CategoryIncAll) => {
+    const filteredData = dataMenu.filter((menu) => {
+      return category === "all" ? menu : menu.category === category;
     });
 
-    setDataMenu(modifiedMenu);
+    return filteredData;
   };
 
+  const addOrder = (selectionMenu: Order) => {
+    dispatch({
+      type: "UPDATE_ORDER",
+      payload: selectionMenu
+    });
+  };
+
+  const deleteOrder = (orderId: string) => {
+    dispatch({
+      type: "DELETE_ORDER",
+      payload: orderId
+    });
+  };
+
+  const isMenuAtOrder = (menu: MenuDataState) => {
+    return state.orderList.find((order) => order.id === menu.id) ? true : false;
+  };
+
+  console.log("[ORDER-LIST:]", state.orderList);
+
+  const dataByCategory = filterByMenu(filterBy);
+
   return (
-    <Card className='col-span-3'>
+    <Card className='h-[88vh] col-span-3'>
       <CardHeader>List Menu</CardHeader>
-      <CardBody>
-        <div className='flex gap-3 flex-wrap'>
-          {dataMenu.map((menu, index) => (
-            <span
-              onClick={() => chooseMenuById(menu.id)}
-              className={`px-3 py-2 border-2 text-sm border-gray-200 hover:cursor-pointer rounded-md ${
-                menu.isChoosen ? " border-blue-500" : ""
-              }`}
-              key={index}
-            >
-              {menu.name}
-            </span>
-          ))}
-        </div>
-        <div className='flex gap-3 flex-wrap'>
-          {dataMenu.map((menu, index) => (
-            <span
-              onClick={() => chooseMenuById(menu.id)}
-              className={`px-3 py-2 border-2 text-sm border-gray-200 hover:cursor-pointer rounded-md ${
-                menu.isChoosen ? " border-blue-500" : ""
-              }`}
-              key={index}
-            >
-              {menu.name}
-            </span>
-          ))}
-        </div>
-      </CardBody>
+      <CheckboxCategory
+        setSelectedCategory={setFilterBy}
+        selectedCategory={filterBy}
+      />
+      <div className='p-5 flex flex-wrap gap-3 overflow-scroll overflow-x-hidden'>
+        {dataByCategory.map((menu, _) => (
+          <Button
+            onClick={() =>
+              !isMenuAtOrder(menu)
+                ? addOrder({
+                    id: menu.id,
+                    name: menu.name,
+                    price: menu.price,
+                    qty: 1
+                  })
+                : deleteOrder(menu.id)
+            }
+            className='h-fit'
+            color={isMenuAtOrder(menu) ? "success" : undefined}
+            outline={!isMenuAtOrder(menu)}
+            key={menu.id}
+          >
+            {menu.name}
+          </Button>
+        ))}
+      </div>
     </Card>
   );
 }

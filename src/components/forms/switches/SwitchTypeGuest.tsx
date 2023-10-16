@@ -11,13 +11,12 @@ type Props = {
 };
 
 const OnOffToggler: React.FC<Props> = (props) => {
-  const { isActive,  toggleModel, changeHandler } = props;
-
+  const { isActive, toggleModel, changeHandler } = props;
 
   return (
     <FormGroup
-      className='mb-4'
       switch
+      className='flex gap-3 items-center justify-center mb-5 p-0'
     >
       <Input
         value={isActive}

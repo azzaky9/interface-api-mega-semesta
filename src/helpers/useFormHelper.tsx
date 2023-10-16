@@ -9,7 +9,7 @@ function useFormsHelper() {
     const isError = errState[valueToCheck] !== undefined;
     const message = isError ? errState[valueToCheck]?.message : "";
 
-    console.log(errState[valueToCheck]?.message);
+    // console.log(errState[valueToCheck]?.message);
 
     return { isError, message: message };
   }

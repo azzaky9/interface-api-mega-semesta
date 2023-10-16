@@ -16,15 +16,15 @@ type onChange<T> = (e: ChangeEvent<HTMLInputElement>, setValueName: T) => void;
 
 type Ref = Form;
 
-type Props  = {
-  changePosition: () => void
-}
+type Props = {
+  changePosition: () => void;
+};
 
 const OrderForm = React.forwardRef<Ref, Props>(function OrderForm(props, ref) {
-  const { dispatch } = useOrder();
+  const { dispatch, state } = useOrder();
   const { isActive, handleChange, setIsActive } = useSwitch();
-  const { getErr } = useFormsHelper()
-  const { changePosition } = props
+  const { getErr } = useFormsHelper();
+  const { changePosition } = props;
 
   const t = useForm<OrderForm>();
   const {
@@ -41,19 +41,21 @@ const OrderForm = React.forwardRef<Ref, Props>(function OrderForm(props, ref) {
       payload: value
     });
 
-    changePosition()
+    changePosition();
   };
+
+  console.log(state);
 
   const changeHandler: onChange<keyof OrderForm> = (e, setValueName) => {
     if (errors[setValueName]) clearErrors();
 
     setValue(setValueName, e.target.value);
   };
-  
+
   const switchProps = { isActive, setIsActive, changeHandler: handleChange };
 
   return (
-    <Card className='shadow-md w-[420px] px-4  pb-5'>
+    <Card className='shadow-md w-[420px] px-4 pb-5'>
       <Form
         ref={ref}
         onSubmit={handleSubmit(onSubmit)}
@@ -90,7 +92,9 @@ const OrderForm = React.forwardRef<Ref, Props>(function OrderForm(props, ref) {
               })}
             />
             {getErr<OrderForm>(errors, "customerNames").isError && (
-              <DisplayError message={getErr<OrderForm>(errors, "customerNames").message} />
+              <DisplayError
+                message={getErr<OrderForm>(errors, "customerNames").message}
+              />
             )}
           </FormGroup>
 
@@ -112,7 +116,7 @@ const OrderForm = React.forwardRef<Ref, Props>(function OrderForm(props, ref) {
                 name='roomNumber'
                 type='number'
                 min={1}
-                defaultValue={1}
+                defaultValue={state.customer.roomNumber}
               />
             </FormGroup>
           )}

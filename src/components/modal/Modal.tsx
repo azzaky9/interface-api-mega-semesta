@@ -1,11 +1,12 @@
+import React from "react";
 import {
-  Modal,
+  Modal as ModalContainer,
   ModalHeader,
   ModalBody,
   ModalProps,
   ModalFooter
 } from "reactstrap";
-import NewMenuForm from "../forms/NewMenuForm";
+
 // import { useMenu } from "../../context/MenuContext";
 // import useInputMenu from "../../hooks/useInputMenu";
 
@@ -14,24 +15,28 @@ type PropAddNewMenu = {
   toggleModal: () => void;
   handleClose?: () => void;
   handleOpen?: () => void;
+  title: string;
+  children: React.ReactNode;
 };
 
-export default function AddNewMenu(prop: PropAddNewMenu & ModalProps) {
-  const { isOpen, toggleModal, handleClose, handleOpen, ...args } = prop;
+export default function Modal(prop: PropAddNewMenu & ModalProps) {
+  const { isOpen, toggleModal, handleClose, handleOpen, title, ...args } = prop;
   // const { addManyMenuFromJson } = useInputMenu();
 
   return (
-    <Modal
+    <ModalContainer
       isOpen={isOpen}
       toggle={toggleModal}
       centered
+      className='mx-auto'
       {...args}
     >
-      <ModalHeader toggle={toggleModal}>Tambah menu baru</ModalHeader>
+      <ModalHeader toggle={toggleModal}>{title}</ModalHeader>
       <ModalBody className='bg-gray-50'>
-        <NewMenuForm handleClose={handleClose!} />
+        {args.children}
+        {/* <NewMenuForm handleClose={handleClose!} /> */}
       </ModalBody>
       <ModalFooter></ModalFooter>
-    </Modal>
-  );  
+    </ModalContainer>
+  );
 }

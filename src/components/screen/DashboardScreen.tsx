@@ -1,15 +1,35 @@
-import { createRef } from "react";
+import { createRef, useEffect, useState } from "react";
 import OrderForm from "../forms/OrderForm";
-import { Form } from "reactstrap";
+import { Button, Form } from "reactstrap";
 import { useOrder } from "../../context/OrderContext";
-import { ReducerInitialState } from "../../types/types";
+import {
+  DataRequest as MenuDataState,
+  ReducerInitialState
+} from "../../types/types";
 import MenuList from "../menu/MenuList";
 import PreviewOrderCard from "../card/PreviewOrderCard";
+import { useMenu } from "../../context/MenuContext";
+import { useLocation } from "react-router-dom";
+import Modal from "../modal/Modal";
+import useModal from "../../hooks/useModal";
 
 export default function DashboardScreen() {
   const ref = createRef<Form>();
 
   const { dispatch, state } = useOrder();
+  const { menuDataQ } = useMenu();
+
+  const { data } = menuDataQ;
+  const { pathname } = useLocation();
+  const modalUtils = useModal();
+
+  const [menuState, setMenuState] = useState<MenuDataState[]>([]);
+
+  const closeAndClear = () => {
+    modalUtils.handleClose();
+
+    dispatch({ type: "CLEAR" });
+  };
 
   const changePosition = () => {
     const togglingPosition =
@@ -36,13 +56,35 @@ export default function DashboardScreen() {
         );
       case "choosen-option":
         return (
-          <div className='px-5 grid py-10 grid-cols-5 gap-5'>
-            <MenuList />
-            <PreviewOrderCard />
+          <div className='flex flex-col'>
+            <div className='ps-10 grid pt-5 pb-4 grid-cols-5 gap-x-10'>
+              <MenuList dataMenu={menuState} />
+              <PreviewOrderCard />
+            </div>
+            <div className='ms-10'>
+              <Button
+                color='danger'
+                onClick={modalUtils.handleOpen}
+              >
+                Back
+              </Button>
+            </div>
           </div>
         );
     }
   };
+
+  useEffect(() => {
+    if (data) {
+      setMenuState(data?.flatMap((list) => list.list_menu));
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (pathname === "/") {
+      dispatch({ type: "CLEAR" });
+    }
+  }, [pathname]);
 
   return (
     <div
@@ -51,6 +93,27 @@ export default function DashboardScreen() {
       }`}
     >
       {getComponentByPosition(state.currentPosition)}
+      <Modal
+        title='Konfirmasi Reset'
+        {...modalUtils}
+      >
+        <div className='grid place-content-center'>
+          <p className='underline mb-4 text-center text-gray-500'>
+            Data customer serta semua order akan di reset, konfirmasi jika ingin
+            melanjutkan.
+          </p>
+          <div className='flex justify-center gap-2'>
+            <Button
+              color='danger'
+              className='danger'
+              onClick={closeAndClear}
+            >
+              Konfirmasi
+            </Button>
+            <Button onClick={modalUtils.handleClose}>Cancel</Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

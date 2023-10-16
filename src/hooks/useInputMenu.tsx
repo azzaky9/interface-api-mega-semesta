@@ -5,12 +5,10 @@ import { v4 as uuid } from "uuid";
 import { enqueueSnackbar } from "notistack";
 import { useMutation } from "react-query";
 import menuHotelsJson from "../assets/menu_hotel.json";
-import { useMenu } from "../context/MenuContext";
-
-export type InsertEnumType = "foods" | "baverage" | "minibar" | "etc";
+import { Category, useMenu } from "../context/MenuContext";
 
 type RequestRequirementArg = {
-  insertType: InsertEnumType;
+  insertType: Category;
   data: DataRequest;
 };
 
@@ -61,9 +59,9 @@ const useInputMenu = () => {
 
   const getSelectionMenu = () => {
     const selections = menuData?.nodes.map((node) => {
-      const { category, groupMenu, id, name, price, isComplete } = node;
+      const { category, groupMenu, id, name, price, isSelect } = node;
 
-      if (isComplete) {
+      if (isSelect) {
         return { category, groupMenu, id, name, price };
       }
     }) as DataRequest[];
