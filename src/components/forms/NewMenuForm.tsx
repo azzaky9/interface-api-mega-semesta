@@ -8,7 +8,7 @@ import { useFormsHelper } from "../../helpers/useFormHelper";
 import LoadingButton from "../buttons/LoadingButton";
 import DisplayError from "../utils/DisplayError";
 
-const categories = ["foods", "baverage", "minibar", "etc"];
+const categories = ["foods", "baverage", "rokok", "store", "etc"];
 const groupMenu = ["Incharge", "Tamu Hotel"];
 
 type Props = {
