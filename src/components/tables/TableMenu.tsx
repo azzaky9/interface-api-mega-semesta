@@ -3,7 +3,6 @@ import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 import { usePagination } from "@table-library/react-table-library/pagination";
 import useCurrency from "../../hooks/useCurrency";
-import { Input, Spinner } from "reactstrap";
 import Pagination from "./Pagination";
 import { MenuEditableSchema, useMenu } from "../../context/MenuContext";
 import { ChangeEvent } from "react";
@@ -62,7 +61,7 @@ const TableMenu = () => {
 
         return (
           <div className='w-[44px] grid place-content-center'>
-            <Input
+            <input
               checked={item.isSelect}
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 handleUpdate(event.target.checked, item.id, "isSelect");
@@ -123,7 +122,8 @@ const TableMenu = () => {
 const CenterLoadingIndicator = () => {
   return (
     <div className='w-full h-full grid place-content-center'>
-      <Spinner color='dark' />
+      {/* <Spinner color='dark' /> */}
+      Loading...
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RootLayouts from "./components/layouts/RootLayouts";
-import DashboardScreen from "./components/screen/DashboardScreen";
 import MenuScreen from "./components/screen/MenuScreen";
+import MainDashboard from "./components/screen/MainDashboard";
+import DashboardScreen from "./components/screen/DashboardScreen";
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
         <Route element={<RootLayouts />}>
           <Route
             path='/'
-            element={<DashboardScreen />}
+            element={<MainDashboard />}
           />
           <Route
             path='/stock'
@@ -20,6 +21,7 @@ function App() {
             path='/menu'
             element={<MenuScreen />}
           />
+          <Route path="/register" element={<DashboardScreen />} />
         </Route>
       </Routes>
     </BrowserRouter>

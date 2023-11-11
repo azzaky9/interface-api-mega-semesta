@@ -1,16 +1,15 @@
 import useInputMenu from "../../hooks/useInputMenu";
-import ButtonWithIcon from "../buttons/ButtonWithIcon";
-import { Plus, Trash2 } from "lucide-react";
-import LoadingButton from "../buttons/LoadingButton";
 import { useMenu } from "../../context/MenuContext";
 
 type PropControlMenu = {
   handleOpen: () => void;
 };
 
-export default function ControlMenu({ handleOpen }: PropControlMenu) {
-  const { deleteMenu } = useInputMenu();
-  const { menuData, menuDataQ } = useMenu();
+export default function ControlMenu(props: PropControlMenu) {
+  const {} = useInputMenu();
+  const { menuData } = useMenu();
+
+  const {} = props;
 
   // const isSelectionEmpty = deletingMenus.length === 0;
   const isDataMenuSelected = menuData?.nodes.filter((node) => node.isSelect);
@@ -19,14 +18,14 @@ export default function ControlMenu({ handleOpen }: PropControlMenu) {
 
   return (
     <div className='px-4 py-4 border-2 flex gap-3 border-gray-200 rounded-md bg-white'>
-      <ButtonWithIcon
+      {/* <ButtonWithIcon
         outline={false}
         size='md'
         color='primary'
         icon={<Plus size={17} />}
         text='Menu Baru'
         onClick={handleOpen}
-      />
+      /> */}
       {/* Developer purposes for insert many data */}
       {/* <LoadingButton
         onClick={() => {
@@ -36,7 +35,7 @@ export default function ControlMenu({ handleOpen }: PropControlMenu) {
         isloading={String(addManyMenuFromJson.isLoading)}
         text='Create Many'
       /> */}
-      {!menuDataQ.isLoading && (
+      {/* {!menuDataQ.isLoading && (
         <LoadingButton
           disabled={isDataMenuSelected?.length === 0}
           color={isDataMenuSelected?.length === 0 ? "secondary" : "danger"}
@@ -47,7 +46,7 @@ export default function ControlMenu({ handleOpen }: PropControlMenu) {
           isloading={String(false)}
           text='Delete Selection Menu'
         />
-      )}
+      )} */}
     </div>
   );
 }

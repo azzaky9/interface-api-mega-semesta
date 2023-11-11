@@ -1,42 +1,31 @@
 import React from "react";
-import {
-  Modal as ModalContainer,
-  ModalHeader,
-  ModalBody,
-  ModalProps,
-  ModalFooter
-} from "reactstrap";
-
-// import { useMenu } from "../../context/MenuContext";
-// import useInputMenu from "../../hooks/useInputMenu";
+import { Dialog, DialogSurface } from "@fluentui/react-components";
 
 type PropAddNewMenu = {
   isOpen: boolean;
-  toggleModal: () => void;
   handleClose?: () => void;
   handleOpen?: () => void;
   title: string;
-  children: React.ReactNode;
+  customSize?: string;
+  dialogContent: React.ReactNode;
 };
 
-export default function Modal(prop: PropAddNewMenu & ModalProps) {
-  const { isOpen, toggleModal, handleClose, handleOpen, title, ...args } = prop;
+export default function Modal(prop: PropAddNewMenu) {
+  const { isOpen, customSize, dialogContent } = prop;
   // const { addManyMenuFromJson } = useInputMenu();
 
+  const createCustomSize = customSize ? customSize : "";
+
   return (
-    <ModalContainer
-      isOpen={isOpen}
-      toggle={toggleModal}
-      centered
-      className='mx-auto'
-      {...args}
+    <Dialog
+      modalType='modal'
+      open={isOpen}
     >
-      <ModalHeader toggle={toggleModal}>{title}</ModalHeader>
-      <ModalBody className='bg-gray-50'>
-        {args.children}
-        {/* <NewMenuForm handleClose={handleClose!} /> */}
-      </ModalBody>
-      <ModalFooter></ModalFooter>
-    </ModalContainer>
+      <DialogSurface
+        className={`transform -translate-x-1/2 left-1/2 top-20 ${createCustomSize}`}
+      >
+        {dialogContent}
+      </DialogSurface>
+    </Dialog>
   );
 }

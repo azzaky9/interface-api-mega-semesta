@@ -1,6 +1,5 @@
 import React, { ChangeEvent } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Form, FormGroup, Label, Input, Card, Button } from "reactstrap";
 import { Customer } from "../../types/types";
 import DisplayError from "../utils/DisplayError";
 import { useOrder } from "../../context/OrderContext";
@@ -14,7 +13,7 @@ type OrderForm = Omit<Customer, "extraInformation">;
 
 type onChange<T> = (e: ChangeEvent<HTMLInputElement>, setValueName: T) => void;
 
-type Ref = Form;
+type Ref = any;
 
 type Props = {
   changePosition: () => void;
@@ -55,8 +54,8 @@ const OrderForm = React.forwardRef<Ref, Props>(function OrderForm(props, ref) {
   const switchProps = { isActive, setIsActive, changeHandler: handleChange };
 
   return (
-    <Card className='shadow-md w-[420px] px-4 pb-5'>
-      <Form
+    <div className='shadow-md w-[420px] px-4 pb-5'>
+      <form
         ref={ref}
         onSubmit={handleSubmit(onSubmit)}
       >
@@ -68,15 +67,13 @@ const OrderForm = React.forwardRef<Ref, Props>(function OrderForm(props, ref) {
           toggleModel='switch'
         />
         <div className='flex flex-col gap-2'>
-          <FormGroup>
-            <Label
-              for='input-name'
+          <div>
+            <label
               className='text-sm'
             >
               Nama Customer
-            </Label>
-            <Input
-              invalid={errors.customerNames !== undefined}
+            </label>
+            <input
               type='text'
               {...register("customerNames", {
                 onChange: (e: ChangeEvent<HTMLInputElement>) =>
@@ -96,17 +93,16 @@ const OrderForm = React.forwardRef<Ref, Props>(function OrderForm(props, ref) {
                 message={getErr<OrderForm>(errors, "customerNames").message}
               />
             )}
-          </FormGroup>
+          </div>
 
           {isActive === "on" && (
-            <FormGroup>
-              <Label
-                for='room-number-input'
+            <div>
+              <label
                 className='text-sm'
               >
                 No Kamar
-              </Label>
-              <Input
+              </label>
+              <input
                 id='room-number-input'
                 autoComplete='off'
                 {...register("roomNumber", {
@@ -118,19 +114,19 @@ const OrderForm = React.forwardRef<Ref, Props>(function OrderForm(props, ref) {
                 min={1}
                 defaultValue={state.customer.roomNumber}
               />
-            </FormGroup>
+            </div>
           )}
         </div>
         <div className='d-grid'>
-          <Button
+          <button
             className='mt-4'
             color='primary'
           >
             Submit
-          </Button>
+          </button>
         </div>
-      </Form>
-    </Card>
+      </form>
+    </div>
   );
 });
 

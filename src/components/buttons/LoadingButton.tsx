@@ -1,4 +1,3 @@
-import { Button, ButtonProps, Spinner } from "reactstrap";
 
 type PropsLoadingButton = {
   isloading: string;
@@ -6,22 +5,19 @@ type PropsLoadingButton = {
   defaulticon?: JSX.Element;
 };
 
-export default function LoadingButton(props: PropsLoadingButton & ButtonProps) {
+export default function LoadingButton(props: PropsLoadingButton) {
   const { isloading, defaulticon, text } = props;
 
   const validateLoading = isloading === "true";
 
   return (
-    <Button
+    <button
       className='flex justify-center items-center'
       disabled={validateLoading}
       {...props}
     >
       {validateLoading && (
-        <Spinner
-          size='sm'
-          className='me-2'
-        />
+        <p>Loading...</p>
       )}
 
       {defaulticon && !validateLoading ? (
@@ -29,6 +25,6 @@ export default function LoadingButton(props: PropsLoadingButton & ButtonProps) {
       ) : null}
 
       <span>{text ? text : "Submit"}</span>
-    </Button>
+    </button>
   );
 }

@@ -1,9 +1,5 @@
 import { Pagination } from "@table-library/react-table-library/types/pagination";
-import {
-  Pagination as PGContainer,
-  PaginationItem,
-  PaginationLink
-} from "reactstrap";
+
 import { MenuEditableSchema } from "../../context/MenuContext";
 
 type Props = {
@@ -34,27 +30,25 @@ export default function Pagination({ pagination, dataNodes }: Props) {
 
   return (
     <div className='flex justify-between'>
-      <PGContainer
-        size='md'
-        aria-label='pagination-table-menus'
-      >
-        <PaginationItem onClick={() => handlePrevNextPages("prev")}>
-          <PaginationLink previous />
-        </PaginationItem>
+      <div aria-label='pagination-table-menus'>
+        <div onClick={() => handlePrevNextPages("prev")}>
+          {/* <PaginationLink previous /> */}
+          prev
+        </div>
         {bindTypesDataTable.map((_, index) => (
-          <PaginationItem
+          <div
             key={index}
             onClick={() => pagination.fns.onSetPage(index)}
-            active={currentPages === index}
           >
-            <PaginationLink href='#'>{index + 1}</PaginationLink>
-          </PaginationItem>
+            <a href='#'>{index + 1}</a>
+          </div>
         ))}
 
-        <PaginationItem onClick={() => handlePrevNextPages("next")}>
-          <PaginationLink next />
-        </PaginationItem>
-      </PGContainer>
+        <div onClick={() => handlePrevNextPages("next")}>
+          <div />
+          Next
+        </div>
+      </div>
       <span>Total Pages: {totalPages}</span>
     </div>
   );

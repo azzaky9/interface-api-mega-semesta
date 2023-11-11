@@ -5,12 +5,25 @@
 * {
   font-size: 1rem !important;
   font-family: "Poppins", sans-serif;
+  font-weight: 400 !important;
   margin: 0 !important;
 }
+
+ .mark-field div[role="alert"], .mark-field .frawy03 {
+  padding-top: 5px !important;
+  padding-left: 0 !important;
+  display: flex ;
+  gap: 5px;
+  align-items: center;
+ }
 
 a {
   text-decoration: none !important;
   color: black;
+}
+
+.fui-Button {
+  gap: 5px !important
 }
 
 body {

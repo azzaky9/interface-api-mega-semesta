@@ -1,11 +1,10 @@
 import { ChangeEvent } from "react";
 import { SubmitHandler } from "react-hook-form";
-import { Form, FormGroup, Label, Input } from "reactstrap";
 import { useMenu } from "../../context/MenuContext";
 import { AddNewMenuForm } from "../../context/MenuContext";
 import useInputMenu from "../../hooks/useInputMenu";
 import { useFormsHelper } from "../../helpers/useFormHelper";
-import LoadingButton from "../buttons/LoadingButton";
+// import LoadingButton from "../buttons/LoadingButton";
 import DisplayError from "../utils/DisplayError";
 
 const categories = ["foods", "baverage", "rokok", "store", "etc"];
@@ -97,15 +96,10 @@ export default function NewMenuForm({ handleClose }: Props) {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onsubmit)}>
-      <FormGroup>
-        <Label
-          for='menu-name'
-          className='text-gray-400 text-sm '
-        >
-          Nama menu
-        </Label>
-        <Input
+    <form onSubmit={handleSubmit(onsubmit)}>
+      <div>
+        <label className='text-gray-400 text-sm '>Nama menu</label>
+        <input
           {...register("name", {
             onChange: (e: ChangeEvent<HTMLInputElement>) =>
               changeHandler(e, "name"),
@@ -114,22 +108,16 @@ export default function NewMenuForm({ handleClose }: Props) {
               message: "Group menu must be required!"
             }
           })}
-          invalid={errors.name !== undefined}
           id='menu-name'
           name='name'
           placeholder='Menu name'
           type='text'
         />
         {shortenDisplayErr("name")}
-      </FormGroup>{" "}
-      <FormGroup>
-        <Label
-          for='category'
-          className='text-gray-400 text-sm'
-        >
-          Category
-        </Label>
-        <Input
+      </div>{" "}
+      <div>
+        <label className='text-gray-400 text-sm'>Category</label>
+        <input
           {...register("category", {
             onChange: (e: ChangeEvent<HTMLInputElement>) =>
               changeHandler(e, "category"),
@@ -138,24 +126,18 @@ export default function NewMenuForm({ handleClose }: Props) {
               message: "Group menu must be required!"
             }
           })}
-          invalid={errors.category !== undefined}
           id='category'
           name='category'
           placeholder='category'
           type='select'
         >
           {createOption(categories)}
-        </Input>
+        </input>
         {shortenDisplayErr("category")}
-      </FormGroup>{" "}
-      <FormGroup>
-        <Label
-          for='groupMenu'
-          className='text-gray-400 text-sm'
-        >
-          Kelompok Menu
-        </Label>
-        <Input
+      </div>{" "}
+      <div>
+        <label className='text-gray-400 text-sm'>Kelompok Menu</label>
+        <input
           {...register("groupMenu", {
             onChange: (e: ChangeEvent<HTMLInputElement>) =>
               changeHandler(e, "groupMenu"),
@@ -164,45 +146,38 @@ export default function NewMenuForm({ handleClose }: Props) {
               message: "Group menu must be required!"
             }
           })}
-          invalid={errors.groupMenu !== undefined}
           id='groupMenu'
           name='groupMenu'
           placeholder='Menu Untuk'
           type='select'
         >
           {createOption(groupMenu)}
-        </Input>
+        </input>
         {shortenDisplayErr("groupMenu")}
-      </FormGroup>
-      <FormGroup>
-        <Label
-          for='price'
-          className='text-gray-400 text-sm'
-        >
-          Harga
-        </Label>
-        <Input
+      </div>
+      <div>
+        <label className='text-gray-400 text-sm'>Harga</label>
+        <input
           {...register("price", {
             onChange: (e: ChangeEvent<HTMLInputElement>) =>
               changeHandler(e, "price"),
             required: true
           })}
-          invalid={errors.price !== undefined}
           id='price'
           name='price'
           placeholder='Harga'
           type='number'
         />
         {shortenDisplayErr("price")}
-      </FormGroup>
-      <LoadingButton
+      </div>
+      {/* <LoadingButton
         color='success'
         className='mt-5'
         type='submit'
         onClick={() => handleSubmit(onsubmit)}
         isloading={String(insertMenu.isLoading)}
-      />
+      /> */}
       {""}
-    </Form>
+    </form>
   );
 }

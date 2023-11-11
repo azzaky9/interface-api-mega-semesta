@@ -1,5 +1,4 @@
 import { ChangeEvent } from "react";
-import { FormGroup, Input, Label } from "reactstrap";
 import { type Switches } from "../OrderForm";
 import { TSetStates } from "../../../types/types";
 
@@ -14,11 +13,8 @@ const OnOffToggler: React.FC<Props> = (props) => {
   const { isActive, toggleModel, changeHandler } = props;
 
   return (
-    <FormGroup
-      switch
-      className='flex gap-3 items-center justify-center mb-5 p-0'
-    >
-      <Input
+    <div className='flex gap-3 items-center justify-center mb-5 p-0'>
+      <input
         value={isActive}
         className='hover:cursor-pointer'
         type={toggleModel}
@@ -27,14 +23,8 @@ const OnOffToggler: React.FC<Props> = (props) => {
         name='switch-guest'
         onChange={changeHandler}
       />
-      <Label
-        for='switch-guest'
-        className='text-sm'
-        check
-      >
-        Tamu Hotel ?
-      </Label>
-    </FormGroup>
+      <label className='text-sm'>Tamu Hotel ?</label>
+    </div>
   );
 };
 
