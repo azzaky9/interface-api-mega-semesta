@@ -9,8 +9,7 @@ import {
   MenuPopover,
   Image,
   Field,
-  Input,
-  useToastController
+  Input
 } from "@fluentui/react-components";
 import {
   EditSettingsRegular,
@@ -23,30 +22,47 @@ import type { MenuProps } from "@fluentui/react-components";
 import { useToggle } from "../../../hooks/useToggle";
 import CigareIcons from "../../../assets/images/cigarette.png";
 import { ChevronDown } from "lucide-react";
+import { TSetStates } from "../../../types/types";
 
-export const CheckboxCategory = () => {
-  const defaultCategory = ["foods", "rokok", "baverage", "store"];
+type Props = {
+  value: Record<string, string[]>;
+  setter: TSetStates<Record<string, string[]>>;
+  savedCategory: Record<string, string[]>;
+  savePrefference: () => void;
+};
+
+export const CheckboxCategory: React.FC<Props> = (props) => {
+  const { setter, value, savePrefference, savedCategory } = props;
 
   const { handleClose, isOpen, handleOpen } = useToggle();
-  const {} = useToastController();
 
   const [searchMenu, setSearchMenu] = React.useState("");
-  const [checkedValues, setCheckedValues] = React.useState<
-    Record<string, string[]>
-  >({ category: defaultCategory });
+
   const onChange: MenuProps["onCheckedValueChange"] = (
     _,
     { name, checkedItems }
   ) => {
-    setCheckedValues((s) => {
+    setter((s) => {
       return s ? { ...s, [name]: checkedItems } : { [name]: checkedItems };
     });
   };
 
-  const savePrefference = () => {
-    handleClose();
+  const onToggle = () => {
+    if (isOpen) {
+      setter(savedCategory);
 
-    console.log("ts");
+      handleClose();
+    } else {
+      handleOpen();
+    }
+  };
+
+  const saveAndClose = () => {
+    savePrefference();
+
+    if (value.category.length !== 0) {
+      handleClose();
+    }
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,14 +71,14 @@ export const CheckboxCategory = () => {
 
   return (
     <Menu
-      checkedValues={checkedValues}
+      checkedValues={value}
       onCheckedValueChange={onChange}
       open={isOpen}
     >
       <div className='flex gap-2'>
         <MenuTrigger disableButtonEnhancement>
           <Button
-            onClick={handleOpen}
+            onClick={onToggle}
             icon={<ChevronDown />}
             iconPosition='after'
           >
@@ -120,7 +136,7 @@ export const CheckboxCategory = () => {
             className='text-sm'
             icon={<EditSettingsRegular />}
             iconPosition='before'
-            onClick={savePrefference}
+            onClick={saveAndClose}
           >
             Save
           </Button>

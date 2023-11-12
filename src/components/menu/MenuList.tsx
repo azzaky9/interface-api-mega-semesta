@@ -1,10 +1,10 @@
+import * as React from "react";
 import {
   Category,
   DataRequest as MenuDataState,
   Order
 } from "../../types/types";
 import { useOrder } from "../../context/OrderContext";
-import { useState } from "react";
 import { CheckboxCategory } from "../forms/switches/CheckboxCategory";
 import { Button, Spinner, ToastTrigger } from "@fluentui/react-components";
 import { Card } from "@fluentui/react-components";
@@ -17,22 +17,33 @@ type Props = {
   dataMenu: MenuDataState[];
 };
 
+type DefaultRecord = Record<string, string[]>;
+
 export type CategoryIncAll = Category | "all";
 
 function MenuList(props: Props) {
+  const { notifyBasicAlert } = useAlert();
   const { dispatch, state } = useOrder();
   const { menuDataQ } = useMenu();
-  const { isLoading } = menuDataQ;
-  const { dataMenu } = props;
   const navigate = useNavigate();
 
-  const { notifyBasicAlert } = useAlert();
+  const { isLoading } = menuDataQ;
+  const { dataMenu } = props;
 
-  const [filterBy, _] = useState<CategoryIncAll>("all");
+  const defaultCategory = ["foods", "rokok", "baverage", "store"];
 
-  const filterByMenu = (category: CategoryIncAll) => {
+  const [savedPrefference, setSavePrefference] = React.useState<DefaultRecord>({
+    category: defaultCategory
+  });
+  const [checkedValues, setCheckedValues] = React.useState<DefaultRecord>({
+    category: defaultCategory
+  });
+
+  const filterByMenu = (category: string[]) => {
+    console.log(checkedValues);
+
     const filteredData = dataMenu.filter((menu) => {
-      return category === "all" ? menu : menu.category === category;
+      return category.includes(menu.category);
     });
 
     return filteredData;
@@ -51,7 +62,35 @@ function MenuList(props: Props) {
 
   const backToMainDashboard = () => navigate("/");
 
-  const dataByCategory = filterByMenu(filterBy);
+  const dataByCategory = filterByMenu(savedPrefference.category as string[]);
+
+  console.log(dataByCategory);
+
+  const savePrefference = () => {
+    if (checkedValues.category.length === 0) {
+      const createConfig: ToastConfig = {
+        message: "Minimal harus memilih 1 dari category",
+        notifType: "info",
+        toastProps: {
+          className: "text-sm text-gray-800"
+        }
+      };
+
+      return notifyBasicAlert(createConfig);
+    }
+
+    const createSuccessConfig: ToastConfig = {
+      message: "Save prefference",
+      notifType: "success",
+      toastProps: {
+        className: "text-sm text-gray-800"
+      }
+    };
+
+    notifyBasicAlert(createSuccessConfig);
+
+    setSavePrefference({ category: checkedValues.category as string[] });
+  };
 
   const notifyConfig: ToastConfig = {
     message: "Menu sudah dipilih",
@@ -74,7 +113,12 @@ function MenuList(props: Props) {
     <div className='col-span-3 '>
       <Card className='bg-white shadow-sm h-full '>
         <div className='mb-3'>
-          <CheckboxCategory />
+          <CheckboxCategory
+            setter={setCheckedValues}
+            value={checkedValues}
+            savePrefference={savePrefference}
+            savedCategory={savedPrefference}
+          />
         </div>
 
         <div className='h-full'>
