@@ -24,7 +24,11 @@ const ResultSearch: React.FC<Props> = (props: Props) => {
 
   return (
     <React.Suspense fallback={<p>Mencari...</p>}>
-      <Menus data={result} />
+      {result.length > 0 ? (
+        <Menus data={result} />
+      ) : (
+        <p className="text-gray-500 text-sm px-4" >Tidak ada menu dengan nama &quot;{searchTerm}&quot;</p>
+      )}
     </React.Suspense>
   );
 };
