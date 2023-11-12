@@ -24,19 +24,28 @@ import CigareIcons from "../../../assets/images/cigarette.png";
 import { ChevronDown } from "lucide-react";
 import { TSetStates } from "../../../types/types";
 
-type Props = {
+type ChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => void;
+
+export type Props = {
   value: Record<string, string[]>;
   setter: TSetStates<Record<string, string[]>>;
   savedCategory: Record<string, string[]>;
+  search: string;
   savePrefference: () => void;
+  handleSearch: ChangeInput;
 };
 
-export const CheckboxCategory: React.FC<Props> = (props) => {
-  const { setter, value, savePrefference, savedCategory } = props;
+export const ToolbarActions: React.FC<Props> = (props) => {
+  const {
+    setter,
+    value,
+    savePrefference,
+    savedCategory,
+    handleSearch,
+    search
+  } = props;
 
   const { handleClose, isOpen, handleOpen } = useToggle();
-
-  const [searchMenu, setSearchMenu] = React.useState("");
 
   const onChange: MenuProps["onCheckedValueChange"] = (
     _,
@@ -65,10 +74,6 @@ export const CheckboxCategory: React.FC<Props> = (props) => {
     }
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchMenu(e.target.value);
-  };
-
   return (
     <Menu
       checkedValues={value}
@@ -89,8 +94,8 @@ export const CheckboxCategory: React.FC<Props> = (props) => {
           <Input
             contentBefore={<SearchRegular />}
             placeholder='Search...'
-            value={searchMenu}
-            onChange={handleSearchChange}
+            value={search}
+            onChange={handleSearch}
           />
         </Field>
       </div>
