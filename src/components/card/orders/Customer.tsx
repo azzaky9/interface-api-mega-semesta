@@ -27,7 +27,7 @@ export default function Customer() {
   console.log(queryData);
 
   const isOrderEmpty = state.orderList.length === 0;
-  const servicePercent = queryData.type === "hotel" ? 5 : 0;
+  const servicePercent = queryData.type === "hotel" ? 10 : 0;
   const totalPriceOrder = state.orderList.reduce(
     (a, b) => a + b.price * b.qty,
     0
@@ -58,14 +58,12 @@ export default function Customer() {
         : formatToIdrCurrency(totalPriceOrder)
     },
     {
-      issue: `Service ${queryData.type === "hotel" ? "+ 5%" : "+ 0"}`,
+      issue: `Service`,
       value: isOrderEmpty
         ? formatToIdrCurrency(0)
         : formatToIdrCurrency(getPricePercentage)
     }
   ];
-
-  console.log(calculateTotal);
 
   return (
     <div className='p-5 '>
