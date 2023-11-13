@@ -1,6 +1,7 @@
 import { Pagination } from "@table-library/react-table-library/types/pagination";
-
+import { Button } from "@fluentui/react-components";
 import { MenuEditableSchema } from "../../context/MenuContext";
+import { ChevronLeftRegular, ChevronRightRegular } from "@fluentui/react-icons";
 
 type Props = {
   pagination: Pagination<MenuEditableSchema>;
@@ -12,11 +13,6 @@ export default function Pagination({ pagination, dataNodes }: Props) {
   const totalPages = pagination.state.getTotalPages(dataNodes);
   const isLastPages = currentPages === totalPages - 1;
   const isFirstPages = pagination.state.page === 0;
-
-  const bindTypesDataTable = pagination.state.getPages(
-    dataNodes
-  ) as MenuEditableSchema[][];
-  console.log(pagination.state.getPages(dataNodes));
 
   const handlePrevNextPages = (action: "next" | "prev") => {
     if (action === "next" && !isLastPages) {
@@ -31,22 +27,24 @@ export default function Pagination({ pagination, dataNodes }: Props) {
   return (
     <div className='flex justify-between'>
       <div aria-label='pagination-table-menus'>
-        <div onClick={() => handlePrevNextPages("prev")}>
+        <div className='flex justify-center items-center h-[42px]'>
+          <Button
+            size='medium'
+            onClick={() => handlePrevNextPages("prev")}
+            iconPosition='before'
+            icon={<ChevronLeftRegular />}
+          />
           {/* <PaginationLink previous /> */}
-          prev
-        </div>
-        {bindTypesDataTable.map((_, index) => (
-          <div
-            key={index}
-            onClick={() => pagination.fns.onSetPage(index)}
-          >
-            <a href='#'>{index + 1}</a>
-          </div>
-        ))}
+          <span className='px-2'>
+            {currentPages + 1} / {totalPages}
+          </span>
 
-        <div onClick={() => handlePrevNextPages("next")}>
-          <div />
-          Next
+          <Button
+            size='medium'
+            onClick={() => handlePrevNextPages("next")}
+            iconPosition='after'
+            icon={<ChevronRightRegular />}
+          />
         </div>
       </div>
       <span>Total Pages: {totalPages}</span>

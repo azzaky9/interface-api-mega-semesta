@@ -47,7 +47,7 @@ export default function MainDashboard() {
           />
         </div>
         <Divider />
-        <div className='h-full'>
+        <div className='h-full w-full'>
           <TableSelling />
         </div>
         <Divider />
@@ -59,7 +59,7 @@ export default function MainDashboard() {
                   Pesanan Baru
                 </DialogTitle>
                 <DialogContent>
-                  <NewOrderForm />
+                  <NewOrderForm handleClose={handleClose} />
                 </DialogContent>
               </DialogBody>
             }
@@ -84,7 +84,7 @@ export default function MainDashboard() {
                   Pesanan Baru
                 </DialogTitle>
                 <DialogContent>
-                  <NewOrderForm />
+                  <NewOrderForm handleClose={handleClose} />
                 </DialogContent>
               </DialogBody>
             }

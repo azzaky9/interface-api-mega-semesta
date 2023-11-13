@@ -3,9 +3,17 @@ import { SubmitHandler } from "react-hook-form";
 import { useMenu } from "../../context/MenuContext";
 import { AddNewMenuForm } from "../../context/MenuContext";
 import useInputMenu from "../../hooks/useInputMenu";
-import { useFormsHelper } from "../../helpers/useFormHelper";
+// import { useFormsHelper } from "../../helpers/useFormHelper";
 // import LoadingButton from "../buttons/LoadingButton";
-import DisplayError from "../utils/DisplayError";
+import {
+  Button,
+  Field,
+  Input,
+  Select,
+  Tooltip
+} from "@fluentui/react-components";
+import { AddSquareRegular } from "@fluentui/react-icons";
+import { X } from "lucide-react";
 
 const categories = ["foods", "baverage", "rokok", "store", "etc"];
 const groupMenu = ["Incharge", "Tamu Hotel"];
@@ -17,7 +25,7 @@ type Props = {
 export default function NewMenuForm({ handleClose }: Props) {
   const { formUtilities, menuDataQ } = useMenu();
   const { generateUniqueId, insertMenu } = useInputMenu();
-  const { getErr } = useFormsHelper();
+  // const { getErr } = useFormsHelper();
   // const { handleChange, isActive, setIsActive } = useSwitch();
 
   const {
@@ -52,15 +60,16 @@ export default function NewMenuForm({ handleClose }: Props) {
 
   console.log(errors);
 
-  const shortenDisplayErr = (valueToCheck: keyof AddNewMenuForm) => {
-    if (getErr<AddNewMenuForm>(errors, valueToCheck).isError) {
-      <DisplayError
-        message={getErr<AddNewMenuForm>(errors, valueToCheck).message}
-      />;
-    }
+  // used later !
+  // const shortenDisplayErr = (valueToCheck: keyof AddNewMenuForm) => {
+  //   if (getErr<AddNewMenuForm>(errors, valueToCheck).isError) {
+  //     <DisplayError
+  //       message={getErr<AddNewMenuForm>(errors, valueToCheck).message}
+  //     />;
+  //   }
 
-    return null;
-  };
+  //   return null;
+  // };
 
   const onsubmit: SubmitHandler<AddNewMenuForm> = async (value) => {
     const uid = generateUniqueId();
@@ -93,90 +102,107 @@ export default function NewMenuForm({ handleClose }: Props) {
     listValuetoClear.forEach((clearName) => {
       setValue(clearName as keyof AddNewMenuForm, "");
     });
+
+    handleClose();
   };
 
   return (
     <form onSubmit={handleSubmit(onsubmit)}>
-      <div>
-        <label className='text-gray-400 text-sm '>Nama menu</label>
-        <input
-          {...register("name", {
-            onChange: (e: ChangeEvent<HTMLInputElement>) =>
-              changeHandler(e, "name"),
-            required: {
-              value: true,
-              message: "Group menu must be required!"
-            }
-          })}
-          id='menu-name'
-          name='name'
-          placeholder='Menu name'
-          type='text'
-        />
-        {shortenDisplayErr("name")}
-      </div>{" "}
-      <div>
-        <label className='text-gray-400 text-sm'>Category</label>
-        <input
-          {...register("category", {
-            onChange: (e: ChangeEvent<HTMLInputElement>) =>
-              changeHandler(e, "category"),
-            required: {
-              value: true,
-              message: "Group menu must be required!"
-            }
-          })}
-          id='category'
-          name='category'
-          placeholder='category'
-          type='select'
-        >
-          {createOption(categories)}
-        </input>
-        {shortenDisplayErr("category")}
-      </div>{" "}
-      <div>
-        <label className='text-gray-400 text-sm'>Kelompok Menu</label>
-        <input
-          {...register("groupMenu", {
-            onChange: (e: ChangeEvent<HTMLInputElement>) =>
-              changeHandler(e, "groupMenu"),
-            required: {
-              value: true,
-              message: "Group menu must be required!"
-            }
-          })}
-          id='groupMenu'
-          name='groupMenu'
-          placeholder='Menu Untuk'
-          type='select'
-        >
-          {createOption(groupMenu)}
-        </input>
-        {shortenDisplayErr("groupMenu")}
+      <div className='grid grid-cols-1 gap-4'>
+        <Field label='Nama Menu'>
+          <Input
+            {...register("name", {
+              onChange: (e: ChangeEvent<HTMLInputElement>) =>
+                changeHandler(e, "name"),
+              required: {
+                value: true,
+                message: "Group menu must be required!"
+              }
+            })}
+            id='menu-name'
+            name='name'
+            placeholder='Menu name'
+            type='text'
+          />
+        </Field>
+        <Field label='Category'>
+          <Select
+            {...register("category", {
+              onChange: (e: ChangeEvent<HTMLInputElement>) =>
+                changeHandler(e, "category"),
+              required: {
+                value: true,
+                message: "Group menu must be required!"
+              }
+            })}
+            id='category'
+            name='category'
+            placeholder='category'
+          >
+            {createOption(categories)}
+          </Select>
+        </Field>
+
+        <Field label='Kelompok menu'>
+          <Select
+            {...register("groupMenu", {
+              onChange: (e: ChangeEvent<HTMLInputElement>) =>
+                changeHandler(e, "groupMenu"),
+              required: {
+                value: true,
+                message: "Group menu must be required!"
+              }
+            })}
+            id='groupMenu'
+            name='groupMenu'
+            placeholder='Menu Untuk'
+          >
+            {createOption(groupMenu)}
+          </Select>
+        </Field>
+        <Field label='Harga menu'>
+          <Input
+            {...register("price", {
+              onChange: (e: ChangeEvent<HTMLInputElement>) =>
+                changeHandler(e, "price"),
+              required: true
+            })}
+            id='price'
+            name='price'
+            placeholder='Harga'
+            type='number'
+            contentBefore='Rp'
+          />
+        </Field>
       </div>
-      <div>
-        <label className='text-gray-400 text-sm'>Harga</label>
-        <input
-          {...register("price", {
-            onChange: (e: ChangeEvent<HTMLInputElement>) =>
-              changeHandler(e, "price"),
-            required: true
-          })}
-          id='price'
-          name='price'
-          placeholder='Harga'
-          type='number'
-        />
-        {shortenDisplayErr("price")}
+      <div className='mt-8 flex flex-reverse w-full gap-2 '>
+        <Tooltip
+          positioning='below'
+          content='Check semua data sebelum melakukan pembuatan menu'
+          relationship='description'
+          appearance='inverted'
+        >
+          <Button
+            className='w-full'
+            icon={<AddSquareRegular />}
+            iconPosition='after'
+            appearance='primary'
+            type='submit'
+          >
+            Create
+          </Button>
+        </Tooltip>
+        <Button
+          onClick={clearAllState}
+          className='w-full'
+          icon={<X />}
+          iconPosition='after'
+          appearance='outline'
+        >
+          Close
+        </Button>
       </div>
-      {/* <LoadingButton
-        color='success'
-        className='mt-5'
-        type='submit'
-        onClick={() => handleSubmit(onsubmit)}
-        isloading={String(insertMenu.isLoading)}
-      /> */}
+
       {""}
     </form>
   );

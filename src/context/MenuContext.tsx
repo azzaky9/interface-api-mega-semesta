@@ -54,7 +54,7 @@ const MenuProvider: React.FC<PropsMenuProvider> = ({ children }) => {
     }
   });
 
-  // console.log(menuData)
+  console.log(menuData);
 
   const menuDataQ = useQuery({
     queryKey: ["list-menu"],

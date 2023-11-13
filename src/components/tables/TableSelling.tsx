@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   FolderRegular,
   EditRegular,
@@ -6,58 +5,29 @@ import {
   DocumentRegular,
   PeopleRegular,
   DocumentPdfRegular,
-  VideoRegular
+  VideoRegular,
+  DeleteRegular
 } from "@fluentui/react-icons";
 import {
-  PresenceBadgeStatus,
-  Avatar,
   TableBody,
   TableCell,
   TableRow,
   Table,
   TableHeader,
   TableHeaderCell,
-  TableSelectionCell,
   TableCellLayout,
-  useTableFeatures,
-  TableColumnDefinition,
-  TableRowId,
-  useTableSelection,
-  createTableColumn
+  PresenceBadgeStatus,
+  Avatar,
+  Button,
+  useArrowNavigationGroup,
+  useFocusableGroup
 } from "@fluentui/react-components";
 
-type FileCell = {
-  label: string;
-  icon: JSX.Element;
-};
-
-type LastUpdatedCell = {
-  label: string;
-  timestamp: number;
-};
-
-type LastUpdateCell = {
-  label: string;
-  icon: JSX.Element;
-};
-
-type AuthorCell = {
-  label: string;
-  status: PresenceBadgeStatus;
-};
-
-type Item = {
-  file: FileCell;
-  author: AuthorCell;
-  lastUpdated: LastUpdatedCell;
-  lastUpdate: LastUpdateCell;
-};
-
-const items: Item[] = [
+const items = [
   {
     file: { label: "Meeting notes", icon: <DocumentRegular /> },
     author: { label: "Max Mustermann", status: "available" },
-    lastUpdated: { label: "7h ago", timestamp: 3 },
+    lastUpdated: { label: "7h ago", timestamp: 1 },
     lastUpdate: {
       label: "You edited this",
       icon: <EditRegular />
@@ -84,61 +54,7 @@ const items: Item[] = [
   {
     file: { label: "Purchase order", icon: <DocumentPdfRegular /> },
     author: { label: "Jane Doe", status: "offline" },
-    lastUpdated: { label: "Tue at 9:30 AM", timestamp: 1 },
-    lastUpdate: {
-      label: "You shared this in a Teams chat",
-      icon: <PeopleRegular />
-    }
-  },
-  {
-    file: { label: "Purchase order", icon: <DocumentPdfRegular /> },
-    author: { label: "Jane Doe", status: "offline" },
-    lastUpdated: { label: "Tue at 9:30 AM", timestamp: 1 },
-    lastUpdate: {
-      label: "You shared this in a Teams chat",
-      icon: <PeopleRegular />
-    }
-  },
-  {
-    file: { label: "Purchase order", icon: <DocumentPdfRegular /> },
-    author: { label: "Jane Doe", status: "offline" },
-    lastUpdated: { label: "Tue at 9:30 AM", timestamp: 1 },
-    lastUpdate: {
-      label: "You shared this in a Teams chat",
-      icon: <PeopleRegular />
-    }
-  },
-  {
-    file: { label: "Purchase order", icon: <DocumentPdfRegular /> },
-    author: { label: "Jane Doe", status: "offline" },
-    lastUpdated: { label: "Tue at 9:30 AM", timestamp: 1 },
-    lastUpdate: {
-      label: "You shared this in a Teams chat",
-      icon: <PeopleRegular />
-    }
-  },
-  {
-    file: { label: "Purchase order", icon: <DocumentPdfRegular /> },
-    author: { label: "Jane Doe", status: "offline" },
-    lastUpdated: { label: "Tue at 9:30 AM", timestamp: 1 },
-    lastUpdate: {
-      label: "You shared this in a Teams chat",
-      icon: <PeopleRegular />
-    }
-  },
-  {
-    file: { label: "Purchase order", icon: <DocumentPdfRegular /> },
-    author: { label: "Jane Doe", status: "offline" },
-    lastUpdated: { label: "Tue at 9:30 AM", timestamp: 1 },
-    lastUpdate: {
-      label: "You shared this in a Teams chat",
-      icon: <PeopleRegular />
-    }
-  },
-  {
-    file: { label: "Purchase order", icon: <DocumentPdfRegular /> },
-    author: { label: "Jane Doe", status: "offline" },
-    lastUpdated: { label: "Tue at 9:30 AM", timestamp: 1 },
+    lastUpdated: { label: "Tue at 9:30 AM", timestamp: 3 },
     lastUpdate: {
       label: "You shared this in a Teams chat",
       icon: <PeopleRegular />
@@ -146,138 +62,103 @@ const items: Item[] = [
   }
 ];
 
-const columns: TableColumnDefinition<Item>[] = [
-  createTableColumn<Item>({
-    columnId: "file"
-  }),
-  createTableColumn<Item>({
-    columnId: "author"
-  }),
-  createTableColumn<Item>({
-    columnId: "lastUpdated"
-  }),
-  createTableColumn<Item>({
-    columnId: "lastUpdate"
-  })
+const columns = [
+  { columnKey: "file", label: "File", size: "w-[120pxpo6t]" },
+  { columnKey: "author", label: "Author", size: "max-w-[230px] w-full" },
+  {
+    columnKey: "lastUpdated",
+    label: "Last updated",
+    size: "max-w-[230px] w-full"
+  },
+  { columnKey: "actions", label: "Actions", size: "max-w-[230px] w-full" },
+  { columnKey: "actions", label: "Actions", size: "max-w-[230px] w-full" },
+  { columnKey: "actions", label: "Actions", size: "max-w-[230px] w-full" }
 ];
 
 export const TableSelling = () => {
-  const [selectedRows, setSelectedRows] = React.useState(
-    () => new Set<TableRowId>([0, 1])
-  );
-
-  const {
-    getRows,
-    selection: {
-      allRowsSelected,
-      someRowsSelected,
-      toggleAllRows,
-      toggleRow,
-      isRowSelected
-    }
-  } = useTableFeatures(
-    {
-      columns,
-      items
-    },
-    [
-      useTableSelection({
-        selectionMode: "multiselect",
-        selectedItems: selectedRows,
-        onSelectionChange: (_, data) => setSelectedRows(data.selectedItems)
-      })
-    ]
-  );
-
-  const rows = getRows((row) => {
-    const selected = isRowSelected(row.rowId);
-    return {
-      ...row,
-      onClick: (e: React.MouseEvent) => toggleRow(e, row.rowId),
-      onKeyDown: (e: React.KeyboardEvent) => {
-        if (e.key === " ") {
-          e.preventDefault();
-          toggleRow(e, row.rowId);
-        }
-      },
-      selected,
-      appearance: selected ? ("brand" as const) : ("none" as const)
-    };
+  const keyboardNavAttr = useArrowNavigationGroup({ axis: "grid" });
+  const focusableGroupAttr = useFocusableGroup({
+    tabBehavior: "limited-trap-focus"
   });
-
-  const toggleAllKeydown = React.useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === " ") {
-        toggleAllRows(e);
-        e.preventDefault();
-      }
-    },
-    [toggleAllRows]
-  );
 
   return (
     <Table
-      aria-label='Table with controlled multiselect'
-      className='max-h-[420px]'
+      {...keyboardNavAttr}
+      aria-label='Table with grid keyboard navigation'
     >
       <TableHeader>
         <TableRow>
-          <TableSelectionCell
-            checked={
-              allRowsSelected ? true : someRowsSelected ? "mixed" : false
-            }
-            onClick={toggleAllRows}
-            onKeyDown={toggleAllKeydown}
-            checkboxIndicator={{ "aria-label": "Select all rows " }}
-          />
-
-          <TableHeaderCell>File</TableHeaderCell>
-          <TableHeaderCell>Author</TableHeaderCell>
-          <TableHeaderCell>Last updated</TableHeaderCell>
-          <TableHeaderCell>Last update</TableHeaderCell>
+          {columns.map((column) => (
+            <TableHeaderCell
+              className={column.size}
+              key={column.columnKey}
+            >
+              {column.label}
+            </TableHeaderCell>
+          ))}
+          <TableHeaderCell />
         </TableRow>
       </TableHeader>
       <TableBody>
-        {rows.map(
-          ({ item, selected, onClick, onKeyDown, appearance }, index) => (
-            <TableRow
-              key={index}
-              onClick={onClick}
-              onKeyDown={onKeyDown}
-              aria-selected={selected}
-              appearance={appearance}
+        {items.map((item) => (
+          <TableRow key={item.file.label}>
+            <TableCell tabIndex={0}>
+              <TableCellLayout media={item.file.icon}>
+                {item.file.label}
+              </TableCellLayout>
+            </TableCell>
+            <TableCell tabIndex={0}>
+              <TableCellLayout
+                media={
+                  <Avatar
+                    aria-label={item.author.label}
+                    name={item.author.label}
+                    badge={{
+                      status: item.author.status as PresenceBadgeStatus
+                    }}
+                  />
+                }
+              >
+                {item.author.label}
+              </TableCellLayout>
+            </TableCell>
+            <TableCell tabIndex={0}>
+              <TableCellLayout
+                media={
+                  <Avatar
+                    aria-label={item.author.label}
+                    name={item.author.label}
+                    badge={{
+                      status: item.author.status as PresenceBadgeStatus
+                    }}
+                  />
+                }
+              >
+                {item.author.label}
+              </TableCellLayout>
+            </TableCell>
+
+            <TableCell tabIndex={0}>{item.lastUpdated.label}</TableCell>
+            <TableCell tabIndex={0}>{item.lastUpdated.label}</TableCell>
+
+            <TableCell
+              width={520}
+              tabIndex={0}
+              {...focusableGroupAttr}
             >
-              <TableSelectionCell
-                checked={selected}
-                checkboxIndicator={{ "aria-label": "Select row" }}
-              />
-              <TableCell>
-                <TableCellLayout media={item.file.icon}>
-                  {item.file.label}
-                </TableCellLayout>
-              </TableCell>
-              <TableCell>
-                <TableCellLayout
-                  media={
-                    <Avatar
-                      aria-label={item.author.label}
-                      name={item.author.label}
-                      badge={{ status: item.author.status }}
-                    />
-                  }
-                >
-                  {item.author.label}
-                </TableCellLayout>
-              </TableCell>
-              <TableCell>{item.lastUpdated.label}</TableCell>
-              <TableCell>
-                <TableCellLayout media={item.lastUpdate.icon}>
-                  {item.lastUpdate.label}
-                </TableCellLayout>
-              </TableCell>
-            </TableRow>
-          )
-        )}
+              <TableCellLayout>
+                <Button
+                  icon={<EditRegular />}
+                  aria-label='Edit'
+                />
+                <Button
+                  icon={<DeleteRegular />}
+                  aria-label='Delete'
+                />
+              </TableCellLayout>
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );

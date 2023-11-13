@@ -41,7 +41,7 @@ export default function MenuButton(props: Props) {
           iconPosition='after'
           className='text-sm'
         >
-          Example
+          Action
         </Button>
       </MenuTrigger>
 

@@ -23,7 +23,11 @@ type NewOrderSchema = {
   noBedroom?: number;
 };
 
-export default function NewOrderForm() {
+type TNewOrderProps = {
+  handleClose: () => void;
+};
+
+export default function NewOrderForm({ handleClose }: TNewOrderProps) {
   const {
     register,
     formState: { errors },
@@ -166,6 +170,7 @@ export default function NewOrderForm() {
         <Button
           type='submit'
           appearance='secondary'
+          onClick={handleClose}
         >
           Cancel
         </Button>

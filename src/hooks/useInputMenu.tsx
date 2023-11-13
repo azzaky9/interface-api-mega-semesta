@@ -2,10 +2,11 @@ import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../configs/firebase-config";
 import { DataRequest } from "../types/types";
 import { v4 as uuid } from "uuid";
-import { enqueueSnackbar } from "notistack";
 import { useMutation } from "react-query";
 import menuHotelsJson from "../assets/menu_hotel.json";
-import { Category, useMenu } from "../context/MenuContext";
+import { Category, MenuEditableSchema, useMenu } from "../context/MenuContext";
+import { useAlert } from "../context/ToastContext";
+import { useState } from "react";
 
 type RequestRequirementArg = {
   insertType: Category;
@@ -19,12 +20,11 @@ type MenuHotelSchema = {
   price: number;
 };
 
-// type RequestDeleteArg = {
-//   deleteFromList: InsertEnumType;
-// };
-
 const useInputMenu = () => {
-  const { menuData } = useMenu();
+  const [isResetLoading, setIsResetLoading] = useState(false);
+
+  const { menuData, setMenuData, menuDataQ } = useMenu();
+  const { notifyBasicAlert } = useAlert();
 
   const generateUniqueId = () => {
     const uid = uuid().split("-")[0];
@@ -42,14 +42,14 @@ const useInputMenu = () => {
           list_menu: arrayUnion(requestData.data)
         });
 
-        enqueueSnackbar({
-          variant: "success",
-          message: "Success to add new menu"
+        notifyBasicAlert({
+          message: "Menu created",
+          notifType: "success"
         });
       } catch (error) {
-        enqueueSnackbar({
-          variant: "error",
-          message: "Failed to adding, some error ocurred."
+        notifyBasicAlert({
+          message: "Failed to create",
+          notifType: "error"
         });
 
         console.log(error);
@@ -89,15 +89,15 @@ const useInputMenu = () => {
           deleteMenuByCategory(dataToDelete);
         }
 
-        console.log("[selection]", selectionMenu);
+        menuDataQ.refetch();
 
-        enqueueSnackbar({
-          variant: "success",
-          message: "Complete to delete."
+        notifyBasicAlert({
+          message: "Complete to delete.",
+          notifType: "success"
         });
       } catch (error) {
-        enqueueSnackbar({
-          variant: "error",
+        notifyBasicAlert({
+          notifType: "error",
           message: "Failed to delete, some error occured."
         });
 
@@ -114,6 +114,7 @@ const useInputMenu = () => {
     return afterBind;
   };
 
+  // developer purpose dont delete this please, for handle bad scenario in the future
   const addManyMenuFromJson = useMutation({
     mutationKey: ["adding-many-menu"],
     mutationFn: async () => {
@@ -157,9 +158,28 @@ const useInputMenu = () => {
     }
   });
 
+  const resetAllSelection = () => {
+    setIsResetLoading(true);
+
+    const resettingAll = menuData?.nodes.map((item) => {
+      return { ...item, isSelect: false };
+    }) as unknown;
+
+    setMenuData({ nodes: resettingAll as MenuEditableSchema[] });
+
+    setIsResetLoading(false);
+  };
+
   // on development
 
-  return { insertMenu, deleteMenu, generateUniqueId, addManyMenuFromJson };
+  return {
+    insertMenu,
+    deleteMenu,
+    generateUniqueId,
+    addManyMenuFromJson,
+    resetAllSelection,
+    isResetLoading
+  };
 };
 
 export default useInputMenu;

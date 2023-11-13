@@ -1,3 +1,4 @@
+import * as React from "react";
 import { CompactTable } from "@table-library/react-table-library/compact";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
@@ -6,16 +7,23 @@ import useCurrency from "../../hooks/useCurrency";
 import Pagination from "./Pagination";
 import { MenuEditableSchema, useMenu } from "../../context/MenuContext";
 import { ChangeEvent } from "react";
+import Loader from "../utils/Loader";
+import { Card, Checkbox } from "@fluentui/react-components";
 
 type DataRender = {
   label: string;
   renderCell: (item: MenuEditableSchema) => any;
 };
 
-const TableMenu = () => {
+type Props = {
+  searchTerm: string;
+};
+
+const TableMenu = (props: Props) => {
   const { formatToIdrCurrency } = useCurrency();
-  // const { deleteMenu } = useInputMenu();
   const { menuDataQ, menuData, setMenuData } = useMenu();
+
+  const { searchTerm } = props;
 
   const theme = useTheme([
     getTheme(),
@@ -61,13 +69,11 @@ const TableMenu = () => {
 
         return (
           <div className='w-[44px] grid place-content-center'>
-            <input
+            <Checkbox
               checked={item.isSelect}
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 handleUpdate(event.target.checked, item.id, "isSelect");
               }}
-              type='checkbox'
-              className='my-3 border-gray-400 hover:cursor-pointer'
             />
           </div>
         );
@@ -75,7 +81,11 @@ const TableMenu = () => {
     }
   ];
 
-  const datas = { nodes: menuData?.nodes };
+  const datas = {
+    nodes: menuData?.nodes.filter((node) =>
+      node.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  };
 
   // @ts-ignore
   const pagination = usePagination(datas, {
@@ -88,6 +98,12 @@ const TableMenu = () => {
     }
   });
 
+  React.useEffect(() => {
+    if (pagination.state.page !== 0) {
+      pagination.fns.onSetPage(0);
+    }
+  }, [searchTerm]);
+
   if (isLoading || isRefetching) <p>Loading...</p>;
 
   if (isError) <p>some error occurred.</p>;
@@ -98,7 +114,7 @@ const TableMenu = () => {
         className='overflow-x-hidden shadow-md bg-white rounded-md'
         style={{ height: "78vh", overflow: "scroll" }}
       >
-        <div>
+        <Card>
           {datas && menuData ? (
             <CompactTable
               columns={COLUMNS}
@@ -108,23 +124,14 @@ const TableMenu = () => {
               pagination={pagination}
             />
           ) : null}
-        </div>
-        {isLoading || isRefetching ? <CenterLoadingIndicator /> : null}
+        </Card>
+        {isLoading || isRefetching ? <Loader /> : null}
       </div>
       <Pagination
         dataNodes={datas.nodes ? datas.nodes : []}
         pagination={pagination}
       />
     </>
-  );
-};
-
-const CenterLoadingIndicator = () => {
-  return (
-    <div className='w-full h-full grid place-content-center'>
-      {/* <Spinner color='dark' /> */}
-      Loading...
-    </div>
   );
 };
 

@@ -22,6 +22,7 @@ export default function Modal(prop: PropAddNewMenu) {
       open={isOpen}
     >
       <DialogSurface
+        onClick={() => console.log("surface click")}
         className={`transform -translate-x-1/2 left-1/2 top-20 ${createCustomSize}`}
       >
         {dialogContent}
