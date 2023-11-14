@@ -8,7 +8,7 @@ import { useOrder } from "../../context/OrderContext";
 import { ToolbarActions } from "../forms/switches/ToolbarActions";
 import { Button, ToastTrigger } from "@fluentui/react-components";
 import { Card } from "@fluentui/react-components";
-import { ArrowHookUpLeftRegular, DeleteRegular } from "@fluentui/react-icons";
+import { ArrowHookUpLeftRegular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import { ToastConfig, useAlert } from "../../context/ToastContext";
 import { useMenu } from "../../context/MenuContext";
