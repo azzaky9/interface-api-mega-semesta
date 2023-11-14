@@ -8,13 +8,22 @@ import { useOrder } from "../../context/OrderContext";
 import { ToolbarActions } from "../forms/switches/ToolbarActions";
 import { Button, ToastTrigger } from "@fluentui/react-components";
 import { Card } from "@fluentui/react-components";
-import { ArrowHookUpLeftRegular } from "@fluentui/react-icons";
+import { ArrowHookUpLeftRegular, DeleteRegular } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import { ToastConfig, useAlert } from "../../context/ToastContext";
 import { useMenu } from "../../context/MenuContext";
 import Loader from "../utils/Loader";
 import type { Props as ToolbarProps } from "../forms/switches/ToolbarActions";
+import {
+  DialogBody,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogTrigger
+} from "@fluentui/react-components";
 import ResultSearch from "./ResultSearch";
+import useModal from "../../hooks/useModal";
+import Modal from "../modal/Modal";
 
 type Props = {
   dataMenu: MenuDataState[];
@@ -28,6 +37,9 @@ function MenuList(props: Props) {
   const { notifyBasicAlert } = useAlert();
 
   const { menuDataQ } = useMenu();
+  const { handleClose, handleOpen, isOpen } = useModal();
+  const { dispatch } = useOrder();
+
   const navigate = useNavigate();
 
   const { isLoading } = menuDataQ;
@@ -62,7 +74,11 @@ function MenuList(props: Props) {
     return filteredData;
   };
 
-  const backToMainDashboard = () => navigate("/");
+  const backAndResetState = () => {
+    dispatch({ type: "CLEAR" });
+
+    navigate("/");
+  };
 
   const dataByCategory = filterByMenu(savedPrefference.category as string[]);
 
@@ -91,6 +107,33 @@ function MenuList(props: Props) {
 
     setSavePrefference({ category: checkedValues.category as string[] });
   };
+
+  const confirmDialogContent = (
+    <DialogBody>
+      <DialogTitle className='font-bold text-lg'>Dialog title</DialogTitle>
+      <DialogContent className='pt-3 pb-5'>
+        Data yang sudah di pilih akan di reset kembali ke awal?, Konfirmasi
+        untuk melanjutkan.
+      </DialogContent>
+      <DialogActions>
+        <DialogTrigger disableButtonEnhancement>
+          <Button
+            appearance='secondary'
+            onClick={handleClose}
+          >
+            Close
+          </Button>
+        </DialogTrigger>
+        <Button
+          className='bg-red-500 shadow-xl hover:bg-red-700 text-white disabled:bg-gray-50 disabled:text-white'
+          appearance='primary'
+          onClick={backAndResetState}
+        >
+          Confirm
+        </Button>
+      </DialogActions>
+    </DialogBody>
+  );
 
   // props for controlling the menu
   const toolbarProps: ToolbarProps = {
@@ -121,13 +164,20 @@ function MenuList(props: Props) {
             <Menus data={dataByCategory} />
           )}
         </div>
-
+        <Modal
+          dialogContent={confirmDialogContent}
+          customSize='w-[390px]'
+          isOpen={isOpen}
+          title='tst'
+          handleClose={handleClose}
+          handleOpen={handleOpen}
+        />
         <div className=''>
           <Button
             className='mt-2'
             icon={<ArrowHookUpLeftRegular />}
             iconPosition='before'
-            onClick={backToMainDashboard}
+            onClick={handleOpen}
           >
             Back
           </Button>

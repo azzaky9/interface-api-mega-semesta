@@ -17,6 +17,7 @@ import {
 import type { FieldProps, MenuProps } from "@fluentui/react-components";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useOrder } from "../../context/OrderContext";
 
 type NewOrderSchema = {
   fullName: string;
@@ -38,6 +39,7 @@ export default function NewOrderForm({ handleClose }: TNewOrderProps) {
   } = useForm<NewOrderSchema>();
 
   const navigate = useNavigate();
+  const { dispatch } = useOrder()
 
   const [checkedValues, setCheckedValues] = React.useState<
     Record<string, string[]>
@@ -69,6 +71,16 @@ export default function NewOrderForm({ handleClose }: TNewOrderProps) {
     const clearName = data.fullName.trim();
 
     const result = { ...data, fullName: clearName, customerType };
+
+    dispatch({
+      type: "UPDATE_CUSTOMER",
+      payload: {
+        customerNames: result.fullName.toLowerCase(),
+        extraInformation: "",
+        roomNumber: result.noBedroom
+      }
+    })
+
 
     navigate(
       `/register?name=${result.fullName}&type=${result.customerType}${

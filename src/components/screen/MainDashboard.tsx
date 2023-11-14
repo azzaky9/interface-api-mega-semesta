@@ -52,23 +52,6 @@ export default function MainDashboard() {
         </div>
         <Divider />
         <div className='px-4 py-3 h-fit flex gap-3'>
-          <Modal
-            dialogContent={
-              <DialogBody>
-                <DialogTitle className='font-semibold text-lg text-center mb-4'>
-                  Pesanan Baru
-                </DialogTitle>
-                <DialogContent>
-                  <NewOrderForm handleClose={handleClose} />
-                </DialogContent>
-              </DialogBody>
-            }
-            customSize='w-[380px]'
-            title='tst'
-            isOpen={isOpen}
-            handleClose={handleClose}
-            handleOpen={handleOpen}
-          />
           <Button
             icon={<DeleteRegular />}
             className='bg-red-500 hover:bg-red-700 text-white disabled:bg-gray-50 disabled:text-white'

@@ -3,9 +3,14 @@ import { useOrder } from "../../../context/OrderContext";
 import useCurrency from "../../../hooks/useCurrency";
 import { Divider, Field, Input } from "@fluentui/react-components";
 import { ReceiptAddRegular } from "@fluentui/react-icons";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import { TSetStates } from "../../../types/types";
 
-export default function Customer() {
+type TPropsCustomer = {
+  setTotalAmount: TSetStates<number>;
+};
+
+export default function Customer({ setTotalAmount }: TPropsCustomer) {
   const { state } = useOrder();
   const { formatToIdrCurrency } = useCurrency();
 
@@ -64,6 +69,10 @@ export default function Customer() {
         : formatToIdrCurrency(getPricePercentage)
     }
   ];
+
+  useEffect(() => {
+    setTotalAmount(calculateTotal);
+  }, [calculateTotal]);
 
   return (
     <div className='p-5 '>
