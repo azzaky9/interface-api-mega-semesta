@@ -16,6 +16,7 @@
     "@fluentui/react-datepicker-compat": "^0.4.3",
     "@fluentui/react-icons": "^2.0.222",
     "@table-library/react-table-library": "^4.1.7",
+    "@types/react-window": "^1.8.8",
     "firebase": "^9.23.0",
     "lucide-react": "^0.284.0",
     "moment": "^2.29.4",
@@ -25,6 +26,7 @@
     "react-hook-form": "^7.47.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.16.0",
+    "react-window": "^1.8.9",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

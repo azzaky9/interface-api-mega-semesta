@@ -30,16 +30,18 @@ export default function MenuScreen() {
   };
 
   return (
-    <div className='flex flex-col gap-4 mx-5 mt-3'>
-      <Modal
-        isOpen={isOpen}
-        dialogContent={<DialogContents closeHandler={handleClose} />}
-        title='ss'
-        customSize='w-[360px]'
-      />
-      <ControlMenu {...controlMenuProps} />
-      <TableMenu searchTerm={search} />
-    </div>
+    <>
+      <div className='flex flex-col gap-4 mx-5 mt-3'>
+        <Modal
+          isOpen={isOpen}
+          dialogContent={<DialogContents closeHandler={handleClose} />}
+          title='ss'
+          customSize='w-[360px]'
+        />
+        <ControlMenu {...controlMenuProps} />
+        <TableMenu searchTerm={search} />
+      </div>
+    </>
   );
 }
 

@@ -37,6 +37,13 @@ export default function PreviewOrderCard() {
       amount: totalAmount
     };
 
+    if (state.orderList.length === 0) {
+      return notifyBasicAlert({
+        message: "Tidak ada pesanan yang di pilih",
+        notifType: "error"
+      });
+    }
+
     if (!isAlreadySave) {
       await insertOrder.mutateAsync(createRequired);
     } else {

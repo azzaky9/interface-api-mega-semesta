@@ -8,14 +8,14 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { MenuProvider } from "./context/MenuContext.tsx";
 import { ToastProvider } from "./context/ToastContext.tsx";
-import { FluentProvider, teamsLightTheme } from "@fluentui/react-components";
+import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <FluentProvider theme={teamsLightTheme}>
+      <FluentProvider theme={webLightTheme}>
         <ToastProvider>
           <OrderProvider>
             <MenuProvider>

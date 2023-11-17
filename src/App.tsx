@@ -15,7 +15,7 @@ function App() {
           />
           <Route
             path='/stock'
-            element={<h1>Stock</h1>}
+            element={<p>stock</p>}
           />
           <Route
             path='/menu'

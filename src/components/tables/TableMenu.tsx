@@ -29,7 +29,7 @@ const TableMenu = (props: Props) => {
     getTheme(),
     {
       Table: `
-        --data-table-library_grid-template-columns: 44px 40% repeat(3, 1fr);
+        --data-table-library_grid-template-columns: repeat(4, 1fr);
       `
     }
   ]);
@@ -120,7 +120,6 @@ const TableMenu = (props: Props) => {
               columns={COLUMNS}
               data={datas}
               theme={theme}
-              layout={{ custom: true, fixedHeader: true }}
               pagination={pagination}
             />
           ) : null}
