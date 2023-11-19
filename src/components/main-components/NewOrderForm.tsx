@@ -6,7 +6,9 @@ import {
   Input,
   InputProps,
   Label,
-  InfoLabelProps
+  InfoLabelProps,
+  useId,
+  Select
 } from "@fluentui/react-components";
 import { MenuList, MenuItemRadio } from "@fluentui/react-components";
 import {
@@ -22,6 +24,7 @@ import { useOrder } from "../../context/OrderContext";
 type NewOrderSchema = {
   fullName: string;
   noBedroom?: number;
+  paymentMethod: "cash" | "unpaid";
 };
 
 type TNewOrderProps = {
@@ -39,7 +42,8 @@ export default function NewOrderForm({ handleClose }: TNewOrderProps) {
   } = useForm<NewOrderSchema>();
 
   const navigate = useNavigate();
-  const { dispatch } = useOrder()
+  const selectId = useId();
+  const { dispatch } = useOrder();
 
   const [checkedValues, setCheckedValues] = React.useState<
     Record<string, string[]>
@@ -61,6 +65,8 @@ export default function NewOrderForm({ handleClose }: TNewOrderProps) {
     customerType === "hotel" ? <span className='text-red-600'>*</span> : null;
 
   const onSubmit: SubmitHandler<NewOrderSchema> = (data) => {
+    console.table(data)
+
     if (customerType === "hotel" && !data.noBedroom) {
       return setError("noBedroom", {
         type: "required",
@@ -77,15 +83,15 @@ export default function NewOrderForm({ handleClose }: TNewOrderProps) {
       payload: {
         customerNames: result.fullName.toLowerCase(),
         extraInformation: "",
-        roomNumber: result.noBedroom
+        roomNumber: result.noBedroom,
+        paymentMethod: result.paymentMethod
       }
-    })
-
+    });
 
     navigate(
       `/register?name=${result.fullName}&type=${result.customerType}${
         result.noBedroom ? `&rn=${result.noBedroom}` : ""
-      }`
+      }&payMethod=${result.paymentMethod}`
     );
 
     return result;
@@ -111,9 +117,11 @@ export default function NewOrderForm({ handleClose }: TNewOrderProps) {
               message: "panjang nama harus lebih dari 3"
             }
           }),
+          autoComplete: "false",
           type: "text"
         }}
         labelledDisplay='Full Name'
+        
       />
       <div className='flex flex-col gap-2 mb-4'>
         <Field
@@ -144,6 +152,20 @@ export default function NewOrderForm({ handleClose }: TNewOrderProps) {
             type='number'
             {...register("noBedroom")}
           />
+        </Field>
+        <Field
+          required
+          className='mark-fied mt-2'
+          label='Payment Method'
+        >
+          <Select
+            id={selectId}
+            {...register("paymentMethod")}
+          >
+            {["cash", "unpaid"].map((s, index) => (
+              <option key={index} value={s}>{s.toUpperCase()}</option>
+            ))}
+          </Select>
         </Field>
       </div>
       <div>

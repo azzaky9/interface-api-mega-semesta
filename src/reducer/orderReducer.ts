@@ -12,7 +12,8 @@ const initialState: ReducerInitialState = {
   customer: {
     customerNames: "",
     extraInformation: "",
-    roomNumber: 1
+    roomNumber: 1,
+    paymentMethod: "cash"
   },
   orderList: [],
   currentPosition: "register"
@@ -58,10 +59,12 @@ const reducer = (state: ReducerInitialState, action: ACTIONTYPE) => {
         customer: {
           customerNames: "",
           extraInformation: "",
-          roomNumber: 1
+          roomNumber: 1,
+          paymentMethod: 'cash'
         },
         orderList: [],
-        currentPosition: "register"
+        currentPosition: "register",
+        paymentMethod: "cash"
       } as ReducerInitialState;
     default:
       throw new Error("dispatch not match with any action type");

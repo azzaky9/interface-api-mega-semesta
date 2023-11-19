@@ -14,16 +14,9 @@ import { ToastConfig, useAlert } from "../../context/ToastContext";
 import { useMenu } from "../../context/MenuContext";
 import Loader from "../utils/Loader";
 import type { Props as ToolbarProps } from "../forms/switches/ToolbarActions";
-import {
-  DialogBody,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  DialogTrigger
-} from "@fluentui/react-components";
 import ResultSearch from "./ResultSearch";
 import useModal from "../../hooks/useModal";
-import Modal from "../modal/Modal";
+import ConfirmModal, { TPropsBasedModal } from "../modal/ConfirmModal";
 
 type Props = {
   dataMenu: MenuDataState[];
@@ -55,7 +48,7 @@ function MenuList(props: Props) {
   // the checkedValue State used to handle checkbox change
   const [checkedValues, setCheckedValues] = React.useState<DefaultRecord>({
     category: defaultCategory
-  });
+  }); 
 
   const [search, setSearch] = React.useState("");
   const defferredValue = React.useDeferredValue(search);
@@ -108,32 +101,32 @@ function MenuList(props: Props) {
     setSavePrefference({ category: checkedValues.category as string[] });
   };
 
-  const confirmDialogContent = (
-    <DialogBody>
-      <DialogTitle className='font-bold text-lg'>Dialog title</DialogTitle>
-      <DialogContent className='pt-3 pb-5'>
-        Data yang sudah di pilih akan di reset kembali ke awal?, Konfirmasi
-        untuk melanjutkan.
-      </DialogContent>
-      <DialogActions>
-        <DialogTrigger disableButtonEnhancement>
-          <Button
-            appearance='secondary'
-            onClick={handleClose}
-          >
-            Close
-          </Button>
-        </DialogTrigger>
-        <Button
-          className='bg-red-500 shadow-xl hover:bg-red-700 text-white disabled:bg-gray-50 disabled:text-white'
-          appearance='primary'
-          onClick={backAndResetState}
-        >
-          Confirm
-        </Button>
-      </DialogActions>
-    </DialogBody>
-  );
+  // const confirmDialogContent = (
+  //   <DialogBody>
+  //     <DialogTitle className='font-bold text-lg'>Dialog title</DialogTitle>
+  //     <DialogContent className='pt-3 pb-5'>
+  //       Data yang sudah di pilih akan di reset kembali ke awal?, Konfirmasi
+  //       untuk melanjutkan.
+  //     </DialogContent>
+  //     <DialogActions>
+  //       <DialogTrigger disableButtonEnhancement>
+  //         <Button
+  //           appearance='secondary'
+  //           onClick={handleClose}
+  //         >
+  //           Close
+  //         </Button>
+  //       </DialogTrigger>
+  //       <Button
+  //         className='bg-red-500 shadow-xl hover:bg-red-700 text-white disabled:bg-gray-50 disabled:text-white'
+  //         appearance='primary'
+  //         onClick={backAndResetState}
+  //       >
+  //         Confirm
+  //       </Button>
+  //     </DialogActions>
+  //   </DialogBody>
+  // );
 
   // props for controlling the menu
   const toolbarProps: ToolbarProps = {
@@ -143,6 +136,25 @@ function MenuList(props: Props) {
     search,
     setter: setCheckedValues,
     value: checkedValues
+  };
+
+  const createPropsModal: TPropsBasedModal = {
+    contentProps: {
+      title: "Konfirmasi",
+      description: `
+        Data yang sudah di pilih akan di reset kembali ke awal?, Konfirmasi
+        untuk melanjutkan.
+      `,
+      cancelAction: handleClose,
+      confirmAction: backAndResetState,
+      confirmVariant: "error"
+    },
+    modalProps: {
+      customSize: "w-[390px]",
+      isOpen: isOpen,
+      handleClose: handleClose,
+      handleOpen: handleOpen
+    }
   };
 
   return (
@@ -164,14 +176,8 @@ function MenuList(props: Props) {
             <Menus data={dataByCategory} />
           )}
         </div>
-        <Modal
-          dialogContent={confirmDialogContent}
-          customSize='w-[390px]'
-          isOpen={isOpen}
-          title='tst'
-          handleClose={handleClose}
-          handleOpen={handleOpen}
-        />
+        <ConfirmModal {...createPropsModal} />
+
         <div className=''>
           <Button
             className='mt-2'

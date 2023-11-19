@@ -5,6 +5,7 @@ type Customer = {
   customerNames: string;
   roomNumber?: number;
   extraInformation?: string;
+  paymentMethod: "cash" | "unpaid"
 };
 
 type Order = {

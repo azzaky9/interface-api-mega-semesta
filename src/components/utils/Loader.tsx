@@ -1,11 +1,15 @@
 import { Spinner } from "@fluentui/react-components";
 
-export default function Loader() {
+type Props = {
+  customLabel?: string
+}
+
+export default function Loader({ customLabel }: Props) {
   return (
     <div className='grid place-content-center h-full gap-3 '>
       <Spinner
         appearance='primary'
-        label='Mengambil menu..'
+        label={customLabel ? customLabel : "Mengambil menu.."}
       />
     </div>
   );

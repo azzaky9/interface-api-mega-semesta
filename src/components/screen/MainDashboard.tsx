@@ -22,13 +22,28 @@ import { useQuery } from "react-query";
 import { query, collection, getDocs } from "firebase/firestore";
 import { db } from "../../configs/firebase-config";
 import { type Order } from "../../types/types";
+import Loader from "../utils/Loader";
+
+type AdminResponse = {
+  adminName: string,
+  isAfterEdit: boolean
+  lastEdittedAt: string
+}
+
+type PaymentResponse = {
+  amount: number
+  isPending: boolean
+  isSuccess: boolean
+  payedAt: string
+}
 
 type OrderResponse = {
+  docId: string
   name: string;
-  cashier: string;
   customerType: "gelora" | "event" | "hotel";
   orderList: Order[];
-  payedAt: string;
+  payment: PaymentResponse;
+  admin: AdminResponse;
   createdAt: string;
   amount: number;
 };
@@ -39,7 +54,9 @@ const getOrderData = async () => {
 
     const qSnapshots = await getDocs(q);
 
-    const data = qSnapshots.docs.map((doc) => doc.data() as OrderResponse);
+    const data = qSnapshots.docs.map((doc) => ({ docId: doc.id, ...doc.data() } as OrderResponse ));
+
+    console.log(data)
 
     return data;
   } catch (error) {
@@ -85,7 +102,7 @@ export default function MainDashboard() {
           {!isLoading ? (
             <TableSelling dataOrder={data ? data : []} />
           ) : (
-            <span>Loading...</span>
+            <Loader customLabel="Load order.."  />
           )}
         </div>
         <Divider />
@@ -110,7 +127,6 @@ export default function MainDashboard() {
               </DialogBody>
             }
             customSize='w-[380px]'
-            title='tst'
             isOpen={isOpen}
             handleClose={handleClose}
             handleOpen={handleOpen}

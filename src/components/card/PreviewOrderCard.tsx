@@ -34,7 +34,8 @@ export default function PreviewOrderCard() {
     const createRequired = {
       customer: state.customer,
       orderList: state.orderList,
-      amount: totalAmount
+      amount: totalAmount,
+      paymentMethod: state.customer.paymentMethod
     };
 
     if (state.orderList.length === 0) {

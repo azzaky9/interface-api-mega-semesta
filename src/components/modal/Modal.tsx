@@ -1,16 +1,15 @@
 import React from "react";
 import { Dialog, DialogSurface } from "@fluentui/react-components";
 
-type PropAddNewMenu = {
+type Props = {
   isOpen: boolean;
   handleClose?: () => void;
   handleOpen?: () => void;
-  title: string;
   customSize?: string;
   dialogContent: React.ReactNode;
 };
 
-export default function Modal(prop: PropAddNewMenu) {
+export default function Modal(prop: Props) {
   const { isOpen, customSize, dialogContent } = prop;
   // const { addManyMenuFromJson } = useInputMenu();
 
@@ -30,3 +29,5 @@ export default function Modal(prop: PropAddNewMenu) {
     </Dialog>
   );
 }
+
+export type { Props }

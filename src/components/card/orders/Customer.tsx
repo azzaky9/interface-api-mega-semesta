@@ -100,7 +100,6 @@ export default function Customer({ setTotalAmount }: TPropsCustomer) {
           <Field>
             <Input
               contentBefore={<ReceiptAddRegular />}
-              appearance='filled-darker-shadow'
               placeholder='Extra Information'
             />
           </Field>

@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 import moment from "moment";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "../configs/firebase-config";
 import type { ReducerInitialState as RequestDataOrder } from "../types/types";
 import { Link, ToastTrigger } from "@fluentui/react-components";
@@ -10,6 +10,9 @@ import {
   useAlert
 } from "../context/ToastContext";
 import { useLocation } from "react-router-dom";
+import { FirebaseError } from "firebase/app";
+import { type OrderResponse } from "../components/screen/MainDashboard";
+
 
 type Amount = {
   amount: number;
@@ -28,15 +31,32 @@ const useRegisterOrder = () => {
       data: Omit<RequestDataOrder, "currentPosition"> & Amount
     ) => {
       try {
+        console.log(data);
+
         const now = moment().format("MMM DD YYYY, dddd HH:mm:ss");
+
+        const { paymentMethod } = data.customer;
+
+        const createPaymentObj = {
+          payedAt: paymentMethod === "cash" ? now : "Not Record", // timestamp
+          isPending: paymentMethod === "unpaid",
+          isSuccess: paymentMethod === "cash",
+          amount: data.amount
+        };
+
+        const createAdminRecord = {
+          adminName: "", // record admin it implement later
+          isAfterEdit: false,
+          lastEdittedAt: now // timestamp
+        };
 
         const dataRequest = {
           name: data.customer.customerNames,
           customerType: params.get("type"), // incharge - gelora- hotel
           orderList: data.orderList,
           amount: data.amount,
-          payedAt: now, // timestamp
-          cashier: "" // record admin it implement later
+          payment: createPaymentObj,
+          admin: createAdminRecord
         };
 
         console.log(`Data request: `, dataRequest);
@@ -73,7 +93,42 @@ const useRegisterOrder = () => {
     }
   });
 
-  return { insertOrder };
+  const approvePayment = useMutation({
+    mutationKey: ["approve-payment"],
+    mutationFn: async (docData: OrderResponse) => {
+      try {
+        const now = moment().format("MMM DD YYYY, dddd HH:mm:ss");
+
+        const docToUpdateRef = doc(db, "order_collections", docData.docId);
+        const bindAppovedValue = {
+          ...docData.payment,
+          isPending: false,
+          isSuccess: true,
+          payedAt: now
+        };
+
+        await updateDoc(docToUpdateRef, {
+          payment: bindAppovedValue
+        });
+
+        notifyBasicAlert({
+          message: "success to update payment!",
+          notifType: "success"
+        });
+      } catch (error) {
+        if (error instanceof FirebaseError) {
+          console.error(error.message, error.name, error.code);
+
+          notifyBasicAlert({
+            message: "error during update payment",
+            notifType: "error"
+          });
+        }
+      }
+    }
+  });
+
+  return { insertOrder, approvePayment };
 };
 
 export { useRegisterOrder };

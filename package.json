@@ -17,6 +17,7 @@
     "@fluentui/react-icons": "^2.0.222",
     "@table-library/react-table-library": "^4.1.7",
     "@types/react-window": "^1.8.8",
+    "class-variance-authority": "^0.7.0",
     "firebase": "^9.23.0",
     "lucide-react": "^0.284.0",
     "moment": "^2.29.4",

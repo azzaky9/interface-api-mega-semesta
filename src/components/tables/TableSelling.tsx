@@ -23,13 +23,16 @@ import { type OrderResponse } from "../screen/MainDashboard";
 import {
   CheckmarkRegular,
   ClipboardTaskList16Regular,
-  Clock24Regular,
   MoneyRegular,
   PersonArrowRightRegular
 } from "@fluentui/react-icons";
 import useCurrency from "../../hooks/useCurrency";
+import ApprovePayment from "../service/ApprovePayment";
 
 type Item = {
+  docId: {
+    value: string
+  },
   name: {
     label: string;
   };
@@ -51,6 +54,9 @@ type Item = {
     label: string;
     icon: JSX.Element;
   };
+  docData: {
+    value: OrderResponse
+  }
 };
 
 interface TableRowData extends RowStateBase<Item> {
@@ -148,21 +154,14 @@ const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
                   icon={<CheckmarkRegular color='green' />}
                 />
               </Tooltip>
-            ) : (
-              <Tooltip
-                content='Belum di bayar'
-                relationship='label'
-              >
-                <Button
-                  appearance='subtle'
-                  size='small'
-                  icon={<Clock24Regular color='red' />}
-                />
-              </Tooltip>
-            )
+            ) : null
           }
         >
-          Payment At 29 Dec 2023
+          {item.payedAt.status === "pending" ? (
+            <ApprovePayment docData={item.docData.value} />
+          ) : (
+            item.payedAt.label
+          )}
         </TableCellLayout>
       </TableCell>
       <TableCell>
@@ -179,31 +178,41 @@ type Props = {
 export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
   const { targetDocument } = useFluent();
   const { formatToIdrCurrency } = useCurrency();
+
+
+
   const scrollbarWidth = useScrollbarWidth({ targetDocument });
 
+
   const matchTables = React.useCallback(() => {
-    const result: Item[] = dataOrder.map((data, index) => {
+    const result: Item[] = dataOrder.map((data, _) => {
       return {
+        docId: {
+          value: data.docId
+        },
         name: {
           label: data.name
         },
         admin: {
-          label: data.cashier
+          label: data.admin.adminName
         },
         amount: {
-          label: formatToIdrCurrency(data.amount),
+          label: formatToIdrCurrency(data.payment.amount),
           icon: <MoneyRegular />
         },
         createdAt: {
           label: data.createdAt
         },
         payedAt: {
-          label: data.payedAt,
-          status: (index + 1) % 2 === 0 ? "success" : "pending"
+          label: data.payment.payedAt,
+          status: data.payment.isSuccess ? "success" : "pending",
         },
         pembelian: {
           label: "any",
           buttonAction: () => console.log("clicked")
+        },
+        docData: {
+          value: data
         }
       };
     });
@@ -230,7 +239,7 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
     [
       useTableSelection({
         selectionMode: "multiselect",
-        defaultSelectedItems: new Set([0, 1])
+        defaultSelectedItems: new Set([])
       })
     ]
   );
@@ -305,3 +314,5 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
     </Table>
   );
 };
+
+export type { Item }

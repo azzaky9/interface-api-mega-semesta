@@ -9,13 +9,14 @@
   margin: 0 !important;
 }
 
- .mark-field div[role="alert"], .mark-field .frawy03 {
+.mark-field div[role="alert"],
+.mark-field .frawy03 {
   padding-top: 5px !important;
   padding-left: 0 !important;
-  display: flex ;
+  display: flex;
   gap: 5px;
   align-items: center;
- }
+}
 
 a {
   text-decoration: none !important;
@@ -23,9 +24,18 @@ a {
 }
 
 .fui-Button {
-  gap: 5px !important
+  gap: 5px !important;
 }
 
-body {
-  @apply bg-gray-50 h-screen w-full;
+@layer base {
+  body {
+    @apply bg-gray-50 h-screen w-full;
+  }
+  .error_variant {
+    @apply bg-red-500 shadow-xl hover:bg-red-700 text-white disabled:bg-gray-50 disabled:text-white;
+  }
+
+  .success_variant {
+    @apply bg-green-500 shadow-xl hover:bg-green-700 text-white disabled:bg-gray-50 disabled:text-white;
+  }
 }

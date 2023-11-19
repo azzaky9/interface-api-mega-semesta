@@ -35,7 +35,6 @@ export default function MenuScreen() {
         <Modal
           isOpen={isOpen}
           dialogContent={<DialogContents closeHandler={handleClose} />}
-          title='ss'
           customSize='w-[360px]'
         />
         <ControlMenu {...controlMenuProps} />
