@@ -18,11 +18,9 @@ import MenuButton from "../buttons/MenuButton";
 import useModal from "../../hooks/useModal";
 import Modal from "../modal/Modal";
 import NewOrderForm from "../main-components/NewOrderForm";
-import { useQuery } from "react-query";
-import { query, collection, getDocs } from "firebase/firestore";
-import { db } from "../../configs/firebase-config";
 import { type Order } from "../../types/types";
 import Loader from "../utils/Loader";
+import { useOrder } from "../../context/OrderContext";
 
 type AdminResponse = {
   adminName: string,
@@ -40,7 +38,7 @@ type PaymentResponse = {
 type OrderResponse = {
   docId: string
   name: string;
-  customerType: "gelora" | "event" | "hotel";
+  customerType: "gelora" | "incharge" | "hotel";
   orderList: Order[];
   payment: PaymentResponse;
   admin: AdminResponse;
@@ -48,31 +46,12 @@ type OrderResponse = {
   amount: number;
 };
 
-const getOrderData = async () => {
-  try {
-    const q = query(collection(db, "order_collections"));
-
-    const qSnapshots = await getDocs(q);
-
-    const data = qSnapshots.docs.map((doc) => ({ docId: doc.id, ...doc.data() } as OrderResponse ));
-
-    console.log(data)
-
-    return data;
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log("Error: ", error.message, error.name, error.stack);
-    }
-  }
-};
 
 export default function MainDashboard() {
+  const { orderDataQ } = useOrder()
   const { isOpen, handleClose, handleOpen } = useModal();
 
-  const { data, isLoading } = useQuery({
-    queryKey: "order-list",
-    queryFn: getOrderData
-  });
+  const { data, isLoading } = orderDataQ
 
   const listMenu: MenuAction[] = [
     {

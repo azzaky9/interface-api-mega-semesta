@@ -13,7 +13,7 @@ export default function ApprovePayment({ docData }: Props) {
   const { handleClose, handleOpen, isOpen } = useModal();
 
   const approveUnpaidPayment = () => {
-    approvePayment.mutate(docData);
+    approvePayment.mutateAsync(docData).then((_) => handleClose());
   };
 
   const createPropsModal: TPropsBasedModal = {

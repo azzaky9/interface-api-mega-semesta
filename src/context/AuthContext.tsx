@@ -54,6 +54,8 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
 
         const user = response.user;
 
+        console.log(user)
+
         return user;
       } catch (error) {
         if (error instanceof FirebaseError) {

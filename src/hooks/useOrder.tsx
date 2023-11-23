@@ -12,7 +12,7 @@ import {
 import { useLocation } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { type OrderResponse } from "../components/screen/MainDashboard";
-
+import { useOrder } from "../context/OrderContext";
 
 type Amount = {
   amount: number;
@@ -20,6 +20,7 @@ type Amount = {
 
 const useRegisterOrder = () => {
   const { notifyBasicAlert, notifyWithDescription } = useAlert();
+  const { orderDataQ } = useOrder()
 
   const collectionRef = collection(db, "order_collections");
   const location = useLocation();
@@ -111,18 +112,26 @@ const useRegisterOrder = () => {
           payment: bindAppovedValue
         });
 
-        notifyBasicAlert({
-          message: "success to update payment!",
-          notifType: "success"
-        });
+        orderDataQ.refetch()
+
+        setTimeout(() => {
+          notifyBasicAlert({
+            message: "success to update payment!",
+            notifType: "success"
+          });
+        }, 500);
+
+
       } catch (error) {
         if (error instanceof FirebaseError) {
           console.error(error.message, error.name, error.code);
 
-          notifyBasicAlert({
-            message: "error during update payment",
-            notifType: "error"
-          });
+          setTimeout(() => {
+            notifyBasicAlert({
+              message: "error during update payment",
+              notifType: "error"
+            });
+          }, 500);
         }
       }
     }

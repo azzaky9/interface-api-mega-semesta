@@ -23,18 +23,21 @@ import { type OrderResponse } from "../screen/MainDashboard";
 import {
   CheckmarkRegular,
   ClipboardTaskList16Regular,
+  HomePersonRegular,
   MoneyRegular,
-  PersonArrowRightRegular
+  PersonArrowRightRegular,
+  PersonLockRegular
 } from "@fluentui/react-icons";
 import useCurrency from "../../hooks/useCurrency";
 import ApprovePayment from "../service/ApprovePayment";
 
 type Item = {
   docId: {
-    value: string
-  },
+    value: string;
+  };
   name: {
     label: string;
+    customerType: OrderResponse["customerType"];
   };
   pembelian: {
     label: string;
@@ -55,8 +58,8 @@ type Item = {
     icon: JSX.Element;
   };
   docData: {
-    value: OrderResponse
-  }
+    value: OrderResponse;
+  };
 };
 
 interface TableRowData extends RowStateBase<Item> {
@@ -86,6 +89,21 @@ const columns = columnIdList.map((colId) =>
 const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
   const { item, selected, appearance, onClick, onKeyDown } = data[index];
 
+  const hashIconList = {
+    incharge: {
+      label: "Pembelian Incharge customer",
+      icon: <PersonArrowRightRegular />
+    },
+    gelora: {
+      label: "Pembelian pada gelora",
+      icon: <PersonLockRegular />
+    },
+    hotel: {
+      label: "Pembelian hotel",
+      icon: <HomePersonRegular />
+    }
+  };
+
   return (
     <TableRow
       aria-rowindex={index + 2}
@@ -100,7 +118,16 @@ const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
           checked={selected}
           checkboxIndicator={{ "aria-label": "Select row" }}
         />
-        <TableCellLayout media={<PersonArrowRightRegular />}>
+        <TableCellLayout
+          media={
+            <Tooltip
+              relationship='label'
+              content={hashIconList[item.name.customerType].label}
+            >
+              {hashIconList[item.name.customerType].icon}
+            </Tooltip>
+          }
+        >
           <span className='text-md capitalize  '>
             {item.name.label.trim().length > 17
               ? `${item.name.label.substring(0, 15)}...`
@@ -179,10 +206,7 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
   const { targetDocument } = useFluent();
   const { formatToIdrCurrency } = useCurrency();
 
-
-
   const scrollbarWidth = useScrollbarWidth({ targetDocument });
-
 
   const matchTables = React.useCallback(() => {
     const result: Item[] = dataOrder.map((data, _) => {
@@ -191,7 +215,8 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
           value: data.docId
         },
         name: {
-          label: data.name
+          label: data.name,
+          customerType: data.customerType
         },
         admin: {
           label: data.admin.adminName
@@ -205,7 +230,7 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
         },
         payedAt: {
           label: data.payment.payedAt,
-          status: data.payment.isSuccess ? "success" : "pending",
+          status: data.payment.isSuccess ? "success" : "pending"
         },
         pembelian: {
           label: "any",
@@ -315,4 +340,4 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
   );
 };
 
-export type { Item }
+export type { Item };

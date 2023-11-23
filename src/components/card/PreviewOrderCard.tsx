@@ -24,7 +24,7 @@ import { useAlert } from "../../context/ToastContext";
 
 export default function PreviewOrderCard() {
   const { insertOrder } = useRegisterOrder();
-  const { state } = useOrder();
+  const { state, orderDataQ } = useOrder();
   const { notifyBasicAlert } = useAlert();
 
   const [isAlreadySave, setIsAlreadySave] = useState(false);
@@ -47,6 +47,8 @@ export default function PreviewOrderCard() {
 
     if (!isAlreadySave) {
       await insertOrder.mutateAsync(createRequired);
+
+      orderDataQ.refetch()
     } else {
       notifyBasicAlert({ message: "Data already exist", notifType: "error" });
     }
