@@ -22,8 +22,7 @@ import { type Order } from "../../types/types";
 import Loader from "../utils/Loader";
 import { useOrder } from "../../context/OrderContext";
 
-type AdminResponse = {
-  adminName: string,
+type InsertInfo = {
   isAfterEdit: boolean
   lastEdittedAt: string
 }
@@ -35,13 +34,14 @@ type PaymentResponse = {
   payedAt: string
 }
 
-type OrderResponse = {
+type OrderResponse<T> = {
   docId: string
   name: string;
   customerType: "gelora" | "incharge" | "hotel";
   orderList: Order[];
   payment: PaymentResponse;
-  admin: AdminResponse;
+  insertInfo: InsertInfo;
+  admin: T;
   createdAt: string;
   amount: number;
 };
@@ -79,6 +79,7 @@ export default function MainDashboard() {
         <Divider />
         <div className='h-full w-full'>
           {!isLoading ? (
+            // @ts-ignore
             <TableSelling dataOrder={data ? data : []} />
           ) : (
             <Loader customLabel="Load order.."  />

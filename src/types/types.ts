@@ -15,6 +15,10 @@ type Order = {
   qty: number
 };
 
+type Admin = {
+  name: string
+}
+
 type Category = "baverage" | "foods" | "minibar" | "rokok" | "store";
 
 interface DataRequest extends AddNewMenuForm {
@@ -38,5 +42,6 @@ export type {
   OrderList,
   TSetStates,
   ReducerInitialState,
-  DataRequest
+  DataRequest,
+  Admin
 };

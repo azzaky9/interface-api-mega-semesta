@@ -17,8 +17,10 @@ import {
   useTableSelection,
   TableRowData as RowStateBase,
   Button,
-  Tooltip
+  Tooltip,
+ 
 } from "@fluentui/react-components";
+import CheckOrderModal from "../card/orders/ModalCheckOrder";
 import { type OrderResponse } from "../screen/MainDashboard";
 import {
   CheckmarkRegular,
@@ -30,6 +32,8 @@ import {
 } from "@fluentui/react-icons";
 import useCurrency from "../../hooks/useCurrency";
 import ApprovePayment from "../service/ApprovePayment";
+import type { Admin } from "../../types/types";
+import useModal from "../../hooks/useModal";
 
 type Item = {
   docId: {
@@ -37,7 +41,7 @@ type Item = {
   };
   name: {
     label: string;
-    customerType: OrderResponse["customerType"];
+    customerType: OrderResponse<Admin>["customerType"];
   };
   pembelian: {
     label: string;
@@ -58,7 +62,7 @@ type Item = {
     icon: JSX.Element;
   };
   docData: {
-    value: OrderResponse;
+    value: OrderResponse<Admin>;
   };
 };
 
@@ -128,7 +132,7 @@ const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
             </Tooltip>
           }
         >
-          <span className='text-md capitalize  '>
+          <span className='text-md capitalize'>
             {item.name.label.trim().length > 17
               ? `${item.name.label.substring(0, 15)}...`
               : item.name.label}
@@ -142,6 +146,7 @@ const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
               className='relative z-50 rounded-lg'
               icon={<ClipboardTaskList16Regular />}
               appearance='primary'
+              onClick={item.pembelian.buttonAction}
             >
               Cek Pembelian
             </Button>
@@ -153,12 +158,12 @@ const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
           media={
             <Avatar
               aria-label={item.admin.label}
-              name='Anita'
+              name={item.admin.label}
             />
           }
         >
           {/* {item.admin.label} */}
-          Anita
+          {item.admin.label}
         </TableCellLayout>
       </TableCell>
       <TableCell>
@@ -199,15 +204,33 @@ const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
 };
 
 type Props = {
-  dataOrder: OrderResponse[];
+  dataOrder: OrderResponse<Admin>[];
 };
 
 export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
   const { targetDocument } = useFluent();
   const { formatToIdrCurrency } = useCurrency();
+  const { isOpen, handleClose, handleOpen } = useModal();
+
+  const [selectionOrder, setSelectionOrder] =
+    React.useState<OrderResponse<Admin> | null>(null);
 
   const scrollbarWidth = useScrollbarWidth({ targetDocument });
 
+  const handleOpenOrder = (dataOrder: OrderResponse<Admin>) => {
+    setSelectionOrder(dataOrder);
+    handleOpen();
+  };
+
+  const handleCloseAndCleared = () => {
+    handleClose();
+
+    setTimeout(() => {
+      setSelectionOrder(null);
+    }, 300);
+  };
+
+  // table matching with schema definition
   const matchTables = React.useCallback(() => {
     const result: Item[] = dataOrder.map((data, _) => {
       return {
@@ -219,7 +242,7 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
           customerType: data.customerType
         },
         admin: {
-          label: data.admin.adminName
+          label: data.admin.name
         },
         amount: {
           label: formatToIdrCurrency(data.payment.amount),
@@ -234,7 +257,7 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
         },
         pembelian: {
           label: "any",
-          buttonAction: () => console.log("clicked")
+          buttonAction: () => handleOpenOrder(data)
         },
         docData: {
           value: data
@@ -295,48 +318,64 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
     [toggleAllRows]
   );
 
-  return (
-    <Table
-      noNativeElements
-      aria-label='Table with selection'
-      aria-rowcount={rows.length}
-    >
-      <TableHeader>
-        <TableRow aria-rowindex={1}>
-          <TableSelectionCell
-            checked={
-              allRowsSelected ? true : someRowsSelected ? "mixed" : false
-            }
-            onClick={toggleAllRows}
-            onKeyDown={toggleAllKeydown}
-            checkboxIndicator={{ "aria-label": "Select all rows" }}
-          />
+  const headerCells: string[] = [
+    "Nama",
+    "Pembelian",
+    "Admin",
+    "Created At",
+    "Payed At",
+    "Amount"
+  ];
 
-          <TableHeaderCell>Nama</TableHeaderCell>
-          <TableHeaderCell>Pembelian</TableHeaderCell>
-          <TableHeaderCell>Admin</TableHeaderCell>
-          <TableHeaderCell>Created At</TableHeaderCell>
-          <TableHeaderCell>Payed At</TableHeaderCell>
-          <TableHeaderCell>Amount</TableHeaderCell>
-          {/** Scrollbar alignment for the header */}
-          <div
-            role='presentation'
-            style={{ width: scrollbarWidth }}
-          />
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <List
-          height={500}
-          itemCount={items.length}
-          itemSize={50}
-          width='98%'
-          itemData={rows}
-        >
-          {RenderRow}
-        </List>
-      </TableBody>
-    </Table>
+  const createControlModal = {
+    isOpen,
+    handleClose: handleCloseAndCleared,
+    handleOpenOrder,
+    selectionOrder
+  };
+
+  return (
+    <>
+      <CheckOrderModal {...createControlModal} />
+      <Table
+        noNativeElements
+        aria-label='Table with selection'
+        aria-rowcount={rows.length}
+      >
+        <TableHeader>
+          <TableRow aria-rowindex={1}>
+            <TableSelectionCell
+              checked={
+                allRowsSelected ? true : someRowsSelected ? "mixed" : false
+              }
+              onClick={toggleAllRows}
+              onKeyDown={toggleAllKeydown}
+              checkboxIndicator={{ "aria-label": "Select all rows" }}
+            />
+            {headerCells.map((cell, index) => (
+              <TableHeaderCell key={index}>{cell}</TableHeaderCell>
+            ))}
+
+            {/** Scrollbar alignment for the header */}
+            <div
+              role='presentation'
+              style={{ width: scrollbarWidth }}
+            />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <List
+            height={500}
+            itemCount={items.length}
+            itemSize={50}
+            width='98%'
+            itemData={rows}
+          >
+            {RenderRow}
+          </List>
+        </TableBody>
+      </Table>
+    </>
   );
 };
 

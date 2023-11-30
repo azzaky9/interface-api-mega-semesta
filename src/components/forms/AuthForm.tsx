@@ -19,7 +19,7 @@ type TAuthForm = {
 };
 
 export default function AuthForm() {
-  const { authWithEmail, checkAndRedirect } = useAuth();
+  const { authWithEmail } = useAuth();
 
   const {
     register,
@@ -27,8 +27,8 @@ export default function AuthForm() {
     handleSubmit
   } = useForm<TAuthForm>();
 
-  const onsubmit: SubmitHandler<TAuthForm> = async (formData) => {
-    authWithEmail.mutateAsync(formData).then((_) => checkAndRedirect.refetch());
+  const onsubmit: SubmitHandler<TAuthForm> =  (formData) => {
+    authWithEmail.mutate(formData)
   };
 
   return (

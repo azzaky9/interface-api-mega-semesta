@@ -3,9 +3,10 @@ import { useRegisterOrder } from "../../hooks/useOrder";
 import ConfirmModal, { TPropsBasedModal } from "../modal/ConfirmModal";
 import useModal from "../../hooks/useModal";
 import { type OrderResponse } from "../screen/MainDashboard";
+import { Admin } from "../../types/types";
 
 type Props = {
-  docData: OrderResponse;
+  docData: OrderResponse<Admin>;
 };
 
 export default function ApprovePayment({ docData }: Props) {

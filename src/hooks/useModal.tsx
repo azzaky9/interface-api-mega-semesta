@@ -1,6 +1,13 @@
 import { useState } from "react";
 
-const useModal = () => {
+type DefaultModalControlProp = {
+  handleClose: () => void
+  handleOpen: () => void
+  toggleModal: () => void
+  isOpen: boolean
+}
+
+const useModal = (): DefaultModalControlProp => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => setIsOpen(true);
@@ -11,5 +18,7 @@ const useModal = () => {
 
   return { isOpen, handleClose, handleOpen, toggleModal };
 };
+
+export type  { DefaultModalControlProp }
 
 export default useModal;

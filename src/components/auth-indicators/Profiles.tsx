@@ -20,6 +20,7 @@ import {
 } from "@fluentui/react-icons";
 import { SignOut24Regular } from "@fluentui/react-icons/lib/fonts";
 import { useAuth } from "../../context/AuthContext";
+import Loader from "../utils/Loader";
 
 // implement later
 
@@ -29,7 +30,7 @@ import { useAuth } from "../../context/AuthContext";
 // };
 
 export default function Profiles() {
-  const { signoutAdmin } = useAuth()
+  const { signoutAdmin, adminProfiles, authWithEmail } = useAuth();
 
   const [isProfilesOpen, setProfilesOpen] = useState(false);
 
@@ -59,11 +60,13 @@ export default function Profiles() {
               }}
             />
           }
-          header={<Text weight='semibold'>Anita Ritriany</Text>}
+          header={
+            <Text weight='semibold'>
+              {authWithEmail.isLoading ? <Loader /> : adminProfiles?.adminName}
+            </Text>
+          }
           description={
-            <Caption1 className='text-gray-400 text-sm'>
-              Last seen at 2023 08 09
-            </Caption1>
+            <Caption1 className='text-gray-400 text-sm'>...</Caption1>
           }
           action={
             <RenderMenu

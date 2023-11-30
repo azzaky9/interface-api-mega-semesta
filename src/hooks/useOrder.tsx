@@ -2,7 +2,7 @@ import { useMutation } from "react-query";
 import moment from "moment";
 import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "../configs/firebase-config";
-import type { ReducerInitialState as RequestDataOrder } from "../types/types";
+import type { Admin, ReducerInitialState as RequestDataOrder } from "../types/types";
 import { Link, ToastTrigger } from "@fluentui/react-components";
 import {
   type ToastConfig,
@@ -13,6 +13,7 @@ import { useLocation } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { type OrderResponse } from "../components/screen/MainDashboard";
 import { useOrder } from "../context/OrderContext";
+import { useAuth } from "../context/AuthContext";
 
 type Amount = {
   amount: number;
@@ -20,7 +21,10 @@ type Amount = {
 
 const useRegisterOrder = () => {
   const { notifyBasicAlert, notifyWithDescription } = useAlert();
-  const { orderDataQ } = useOrder()
+  const { orderDataQ } = useOrder();
+  const { adminProfiles } = useAuth();
+
+  console.log();
 
   const collectionRef = collection(db, "order_collections");
   const location = useLocation();
@@ -36,49 +40,47 @@ const useRegisterOrder = () => {
 
         const now = moment().format("MMM DD YYYY, dddd HH:mm:ss");
 
-        const { paymentMethod } = data.customer;
+        if (adminProfiles) {
+          const adminDocRef = doc(db, "admin_profiles", adminProfiles.adminId);
 
-        const createPaymentObj = {
-          payedAt: paymentMethod === "cash" ? now : "Not Record", // timestamp
-          isPending: paymentMethod === "unpaid",
-          isSuccess: paymentMethod === "cash",
-          amount: data.amount
-        };
+          const { paymentMethod } = data.customer;
 
-        const createAdminRecord = {
-          adminName: "", // record admin it implement later
-          isAfterEdit: false,
-          lastEdittedAt: now // timestamp
-        };
+          const createPaymentObj = {
+            payedAt: paymentMethod === "cash" ? now : "Not Record", // timestamp
+            isPending: paymentMethod === "unpaid",
+            isSuccess: paymentMethod === "cash",
+            amount: data.amount
+          };
+      
+          const dataRequest = {
+            name: data.customer.customerNames,
+            customerType: params.get("type"), // incharge - gelora- hotel
+            orderList: data.orderList,
+            amount: data.amount,
+            payment: createPaymentObj,
+            admin: adminDocRef
+          };
 
-        const dataRequest = {
-          name: data.customer.customerNames,
-          customerType: params.get("type"), // incharge - gelora- hotel
-          orderList: data.orderList,
-          amount: data.amount,
-          payment: createPaymentObj,
-          admin: createAdminRecord
-        };
+          console.log(`Data request: `, dataRequest);
 
-        console.log(`Data request: `, dataRequest);
+          await addDoc(collectionRef, dataRequest);
 
-        await addDoc(collectionRef, dataRequest);
+          const successConfig: ToastWithDescription = {
+            message: "Berhasil",
+            notifType: "success",
+            description:
+              "Data tersebut akan di display pada main table, bisa di check jika menekan tombol 'back'",
+            toastProps: {
+              action: (
+                <ToastTrigger>
+                  <Link className='text-sm'>Dismiss</Link>
+                </ToastTrigger>
+              )
+            }
+          };
 
-        const successConfig: ToastWithDescription = {
-          message: "Berhasil",
-          notifType: "success",
-          description:
-            "Data tersebut akan di display pada main table, bisa di check jika menekan tombol 'back'",
-          toastProps: {
-            action: (
-              <ToastTrigger>
-                <Link className='text-sm'>Dismiss</Link>
-              </ToastTrigger>
-            )
-          }
-        };
-
-        notifyWithDescription(successConfig);
+          notifyWithDescription(successConfig);
+        }
       } catch (error) {
         if (error instanceof Error) {
           const errConfig: ToastConfig = {
@@ -88,7 +90,7 @@ const useRegisterOrder = () => {
 
           notifyBasicAlert(errConfig);
 
-          console.error(error.message, error.stack);
+          console.error(error);
         }
       }
     }
@@ -96,7 +98,7 @@ const useRegisterOrder = () => {
 
   const approvePayment = useMutation({
     mutationKey: ["approve-payment"],
-    mutationFn: async (docData: OrderResponse) => {
+    mutationFn: async (docData: OrderResponse<Admin>) => {
       try {
         const now = moment().format("MMM DD YYYY, dddd HH:mm:ss");
 
@@ -112,7 +114,7 @@ const useRegisterOrder = () => {
           payment: bindAppovedValue
         });
 
-        orderDataQ.refetch()
+        orderDataQ.refetch();
 
         setTimeout(() => {
           notifyBasicAlert({
@@ -120,8 +122,6 @@ const useRegisterOrder = () => {
             notifType: "success"
           });
         }, 500);
-
-
       } catch (error) {
         if (error instanceof FirebaseError) {
           console.error(error.message, error.name, error.code);

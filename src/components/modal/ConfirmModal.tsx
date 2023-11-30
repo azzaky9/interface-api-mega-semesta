@@ -102,4 +102,6 @@ const ConfirmModal: React.FC<TPropsBasedModal> = ({
 
 export type { TPropsBasedModal };
 
+export { ConfirmButton }
+
 export default memo(ConfirmModal);

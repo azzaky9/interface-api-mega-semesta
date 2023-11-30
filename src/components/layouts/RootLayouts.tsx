@@ -6,15 +6,11 @@ import Loader from "../utils/Loader";
 
 export default function RootLayouts() {
   const { pathname } = useLocation();
-  const { authWithEmail, checkAndRedirect } = useAuth();
+  const { authWithEmail } = useAuth();
 
   const isLocationAuth = pathname === "/auth";
 
-  if (
-    authWithEmail.isLoading ||
-    checkAndRedirect.isRefetching ||
-    checkAndRedirect.isLoading
-  ) {
+  if (authWithEmail.isLoading) {
     return (
       <div className='h-screen'>
         <Loader customLabel='Melakukan Autentikasi..' />

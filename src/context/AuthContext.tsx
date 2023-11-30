@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect } from "react";
-import { useMutation, useQuery } from "react-query";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useMutation } from "react-query";
 import { FirebaseError } from "firebase/app";
 import {
   signInWithEmailAndPassword,
@@ -7,11 +7,12 @@ import {
   signOut,
   onAuthStateChanged
 } from "firebase/auth";
-import { auth } from "../configs/firebase-config";
+import { auth, db } from "../configs/firebase-config";
 import type { UseMutationResult } from "react-query";
 import type { TAuthForm } from "../components/forms/AuthForm";
 import { useNavigate } from "react-router-dom";
-import { UseQueryResult } from "react-query";
+import { doc, getDoc } from "firebase/firestore";
+import { useAlert } from "./ToastContext";
 
 type AuthData = {
   adminId: string;
@@ -19,7 +20,12 @@ type AuthData = {
   lastSeen: string;
 };
 
+type AdminProfiles = {
+  name: string;
+};
+
 type InititalCtx = {
+  adminProfiles: AuthData | null;
   authWithEmail: UseMutationResult<
     User | undefined,
     unknown,
@@ -27,7 +33,7 @@ type InititalCtx = {
     unknown
   >;
   signoutAdmin: () => void;
-  checkAndRedirect: UseQueryResult<void, unknown>;
+  checkAndRedirect: () => void;
 };
 
 const AuthContext = createContext({} as InititalCtx);
@@ -36,9 +42,38 @@ type Props = {
   children: React.ReactNode;
 };
 
+
 const AuthProvider: React.FC<Props> = ({ children }) => {
+  const [adminProfiles, setAdminProfiles] = useState<AuthData | null>(null);
+  const { notifyBasicAlert } = useAlert();
 
   const navigate = useNavigate();
+
+  console.log(adminProfiles)
+
+  const getAdminProfiles = async (uid: string) => {
+    try {
+      const docReff = doc(db, "admin_profiles", uid);
+      const getAdminProfile = await getDoc(docReff);
+
+      if (getAdminProfile.exists()) {
+        const adminData = getAdminProfile.data() as AdminProfiles;
+
+        setAdminProfiles({
+          adminName: adminData.name,
+          adminId: uid,
+          lastSeen: ""
+        });
+      } else {
+        notifyBasicAlert({
+          message: "Admin not exist",
+          notifType: "error"
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const authWithEmail = useMutation({
     mutationKey: ["email-signin"],
@@ -54,7 +89,9 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
 
         const user = response.user;
 
-        console.log(user)
+        if (user) {
+          await getAdminProfiles(user.uid);
+        }
 
         return user;
       } catch (error) {
@@ -70,27 +107,42 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
     }
   });
 
-  const signoutAdmin = async () => signOut(auth).then((_) => navigate("/auth"));
+  const signoutAdmin = async () =>
+    signOut(auth).then((_) => {
+      navigate("/auth");
+      setAdminProfiles(null);
+    });
 
-  const checkAndRedirect = useQuery({
-    queryKey: ["auth-data"],
-    queryFn: () => console.log("fetch"),
-    staleTime: Infinity
-  });
+  const checkAndRedirect = async () => {
+    try {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          await getAdminProfiles(user.uid);
+
+          return navigate("/");
+        }
+
+        notifyBasicAlert({
+          message: "User already logged out.",
+          notifType: "info"
+        });
+
+        return navigate("/auth");
+      });
+    } catch (error) {
+      if (error) {
+        console.error(error);
+      }
+    }
+  };
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        return navigate("/auth");
-      }
-
-      return navigate("/");
-    });
+    checkAndRedirect();
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ authWithEmail, signoutAdmin, checkAndRedirect }}
+      value={{ authWithEmail, signoutAdmin, checkAndRedirect, adminProfiles }}
     >
       {children}
     </AuthContext.Provider>
