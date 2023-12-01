@@ -5,6 +5,7 @@ import MainDashboard from "./components/screen/MainDashboard";
 import DashboardScreen from "./components/screen/DashboardScreen";
 import AuthScreen from "./components/screen/AuthScreen";
 import { AuthProvider } from "./context/AuthContext";
+import SalesScreen from "./components/screen/SalesScreen";
 
 function App() {
   return (
@@ -31,6 +32,10 @@ function App() {
             <Route
               path='/register'
               element={<DashboardScreen />}
+            />
+            <Route
+              path='/sales'
+              element={<SalesScreen />}
             />
           </Route>
         </Routes>

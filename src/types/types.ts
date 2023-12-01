@@ -17,6 +17,7 @@ type Order = {
 
 type Admin = {
   name: string
+  role: "super_admin" | "admin" | "supervisor"
 }
 
 type Category = "baverage" | "foods" | "minibar" | "rokok" | "store";

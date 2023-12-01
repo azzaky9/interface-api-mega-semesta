@@ -4,7 +4,7 @@ import {
   Input,
   DialogBody,
   DialogTitle,
-  DialogContent
+  DialogContent,
 } from "@fluentui/react-components";
 import { TableSelling } from "../tables/TableSelling";
 import {
@@ -21,21 +21,25 @@ import NewOrderForm from "../main-components/NewOrderForm";
 import { type Order } from "../../types/types";
 import Loader from "../utils/Loader";
 import { useOrder } from "../../context/OrderContext";
+import { useState } from "react";
+import { doc } from "firebase/firestore";
+import { useRegisterOrder } from "../../hooks/useOrder";
+import { db } from "../../configs/firebase-config";
 
 type InsertInfo = {
-  isAfterEdit: boolean
-  lastEdittedAt: string
-}
+  isAfterEdit: boolean;
+  lastEdittedAt: string;
+};
 
 type PaymentResponse = {
-  amount: number
-  isPending: boolean
-  isSuccess: boolean
-  payedAt: string
-}
+  amount: number;
+  isPending: boolean;
+  isSuccess: boolean;
+  payedAt: string;
+};
 
 type OrderResponse<T> = {
-  docId: string
+  docId: string;
   name: string;
   customerType: "gelora" | "incharge" | "hotel";
   orderList: Order[];
@@ -46,12 +50,16 @@ type OrderResponse<T> = {
   amount: number;
 };
 
-
 export default function MainDashboard() {
-  const { orderDataQ } = useOrder()
+  const { orderDataQ } = useOrder();
+  const { deleteMultipleOrder } = useRegisterOrder();
   const { isOpen, handleClose, handleOpen } = useModal();
 
-  const { data, isLoading } = orderDataQ
+  const [selectedDeleting, setSelectedDeleting] = useState<string[]>([]);
+
+  console.log(selectedDeleting);
+
+  const { data, isLoading } = orderDataQ;
 
   const listMenu: MenuAction[] = [
     {
@@ -65,6 +73,23 @@ export default function MainDashboard() {
       name: "Print Penjualan"
     }
   ];
+
+  const doDelete = async () => {
+    if (selectedDeleting.length === 0) {
+      return;
+    }
+
+    const convertAllToRef = selectedDeleting.map((selected) =>
+      doc(db, "order_collections", selected)
+    );
+
+    await deleteMultipleOrder.mutateAsync(convertAllToRef);
+
+    setSelectedDeleting([])
+
+    orderDataQ.refetch()
+  };
+
 
   return (
     <div className='mx-4 my-8 grid grid-cols-8 gap-x-3 h-[90vh]'>
@@ -80,16 +105,18 @@ export default function MainDashboard() {
         <div className='h-full w-full'>
           {!isLoading ? (
             // @ts-ignore
-            <TableSelling dataOrder={data ? data : []} />
+            <TableSelling setSelectedDelete={setSelectedDeleting} dataOrder={data ? data : []} collectionDeletes={selectedDeleting} />
           ) : (
-            <Loader customLabel="Load order.."  />
+            <Loader customLabel='Load order..' />
           )}
         </div>
         <Divider />
         <div className='px-4 py-3 h-fit flex gap-3'>
           <Button
+          onClick={doDelete}
+            disabled={selectedDeleting.length === 0}
             icon={<DeleteRegular />}
-            className='bg-red-500 hover:bg-red-700 text-white disabled:bg-gray-50 disabled:text-white'
+            className='bg-red-500 hover:bg-red-700 text-white disabled:bg-gray-50 disabled:text-gray-500'
             appearance='outline'
           >
             Delete

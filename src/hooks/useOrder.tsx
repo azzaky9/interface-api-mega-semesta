@@ -1,8 +1,19 @@
 import { useMutation } from "react-query";
 import moment from "moment";
-import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  writeBatch,
+  DocumentReference,
+  DocumentData
+} from "firebase/firestore";
 import { db } from "../configs/firebase-config";
-import type { Admin, ReducerInitialState as RequestDataOrder } from "../types/types";
+import type {
+  Admin,
+  ReducerInitialState as RequestDataOrder
+} from "../types/types";
 import { Link, ToastTrigger } from "@fluentui/react-components";
 import {
   type ToastConfig,
@@ -51,14 +62,15 @@ const useRegisterOrder = () => {
             isSuccess: paymentMethod === "cash",
             amount: data.amount
           };
-      
+
           const dataRequest = {
             name: data.customer.customerNames,
             customerType: params.get("type"), // incharge - gelora- hotel
             orderList: data.orderList,
             amount: data.amount,
             payment: createPaymentObj,
-            admin: adminDocRef
+            admin: adminDocRef,
+            createdAt: now
           };
 
           console.log(`Data request: `, dataRequest);
@@ -137,7 +149,31 @@ const useRegisterOrder = () => {
     }
   });
 
-  return { insertOrder, approvePayment };
+  const deleteMultipleOrder = useMutation({
+    mutationKey: ["delete-multiple-order"],
+    mutationFn: async (
+      idToDeleteDocuments: DocumentReference<DocumentData>[]
+    ) => {
+      try {
+        const batch = writeBatch(db);
+
+        idToDeleteDocuments.forEach((docRef) => {
+          batch.delete(docRef);
+        });
+
+        await batch.commit();
+
+        notifyBasicAlert({
+          message: "Complete to delete.",
+          notifType: "success"
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  });
+
+  return { insertOrder, approvePayment, deleteMultipleOrder };
 };
 
 export { useRegisterOrder };

@@ -9,7 +9,6 @@ import {
   TableRow,
   Table,
   TableHeader,
-  TableHeaderCell,
   TableCellLayout,
   TableSelectionCell,
   createTableColumn,
@@ -17,8 +16,7 @@ import {
   useTableSelection,
   TableRowData as RowStateBase,
   Button,
-  Tooltip,
- 
+  Tooltip
 } from "@fluentui/react-components";
 import CheckOrderModal from "../card/orders/ModalCheckOrder";
 import { type OrderResponse } from "../screen/MainDashboard";
@@ -32,8 +30,9 @@ import {
 } from "@fluentui/react-icons";
 import useCurrency from "../../hooks/useCurrency";
 import ApprovePayment from "../service/ApprovePayment";
-import type { Admin } from "../../types/types";
+import type { Admin, TSetStates } from "../../types/types";
 import useModal from "../../hooks/useModal";
+import RenderHeaderCells from "./RenderHeaderCells";
 
 type Item = {
   docId: {
@@ -71,6 +70,7 @@ interface TableRowData extends RowStateBase<Item> {
   onKeyDown: (e: React.KeyboardEvent) => void;
   selected: boolean;
   appearance: "brand" | "none";
+  collectionDelete: string[];
 }
 
 interface ReactWindowRenderFnProps extends ListChildComponentProps {
@@ -91,7 +91,8 @@ const columns = columnIdList.map((colId) =>
 );
 
 const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
-  const { item, selected, appearance, onClick, onKeyDown } = data[index];
+  const { item, selected, appearance, onClick, onKeyDown, collectionDelete } =
+    data[index];
 
   const hashIconList = {
     incharge: {
@@ -119,7 +120,7 @@ const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
       <TableCell>
         <TableSelectionCell
           onClick={onClick}
-          checked={selected}
+          checked={selected && collectionDelete.includes(item.docId.value)}
           checkboxIndicator={{ "aria-label": "Select row" }}
         />
         <TableCellLayout
@@ -168,7 +169,7 @@ const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
       </TableCell>
       <TableCell>
         <TableCellLayout aria-label='created-indicator'>
-          Created At, 20 Nov 2023
+          {item.createdAt.label}
         </TableCellLayout>
       </TableCell>
       <TableCell>
@@ -205,13 +206,18 @@ const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
 
 type Props = {
   dataOrder: OrderResponse<Admin>[];
+  setSelectedDelete: TSetStates<string[]>;
+  collectionDeletes: string[];
 };
 
-export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
+export const TableSelling: React.FC<Props> = (props) => {
+  const { dataOrder, collectionDeletes, setSelectedDelete } = props;
+
   const { targetDocument } = useFluent();
   const { formatToIdrCurrency } = useCurrency();
   const { isOpen, handleClose, handleOpen } = useModal();
 
+  // this state to keep id and display when check list order.
   const [selectionOrder, setSelectionOrder] =
     React.useState<OrderResponse<Admin> | null>(null);
 
@@ -296,7 +302,20 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
     const selected = isRowSelected(row.rowId);
     return {
       ...row,
-      onClick: (e: React.MouseEvent) => toggleRow(e, row.rowId),
+      collectionDelete: collectionDeletes,
+      onClick: (e: React.MouseEvent) => {
+        toggleRow(e, row.rowId);
+
+        console.log(selected);
+
+        if (!selected) {
+          setSelectedDelete((prev) => [...prev, row.item.docId.value]);
+        } else {
+          setSelectedDelete((prev) =>
+            [...prev].filter((a) => a !== row.item.docId.value)
+          );
+        }
+      },
       onKeyDown: (e: React.KeyboardEvent) => {
         if (e.key === " ") {
           e.preventDefault();
@@ -308,15 +327,24 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
     };
   });
 
+  const getAllDocId = rows.map((row) => row.item.docId.value)
+
   const toggleAllKeydown = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key === " ") {
         toggleAllRows(e);
+        setSelectedDelete(getAllDocId)
         e.preventDefault();
       }
     },
     [toggleAllRows]
   );
+
+  const toggleAllItems = (e:  React.SyntheticEvent<Element, Event>) => {
+    toggleAllRows(e)
+
+    setSelectedDelete(getAllDocId)
+  }
 
   const headerCells: string[] = [
     "Nama",
@@ -348,13 +376,11 @@ export const TableSelling: React.FC<Props> = ({ dataOrder }) => {
               checked={
                 allRowsSelected ? true : someRowsSelected ? "mixed" : false
               }
-              onClick={toggleAllRows}
+              onClick={toggleAllItems}
               onKeyDown={toggleAllKeydown}
               checkboxIndicator={{ "aria-label": "Select all rows" }}
             />
-            {headerCells.map((cell, index) => (
-              <TableHeaderCell key={index}>{cell}</TableHeaderCell>
-            ))}
+            <RenderHeaderCells titles={headerCells} />
 
             {/** Scrollbar alignment for the header */}
             <div

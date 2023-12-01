@@ -4,7 +4,8 @@ import { Divider, MenuItem, MenuList, Text } from "@fluentui/react-components";
 import {
   TextBulletList20Regular,
   BoxEdit20Regular,
-  Food24Regular
+  Food24Regular,
+  ArrowTrendingLines24Regular
 } from "@fluentui/react-icons";
 
 const sidebarMenu = [
@@ -22,6 +23,11 @@ const sidebarMenu = [
     directTo: "/menu",
     icons: <Food24Regular />,
     text: "Menu"
+  },
+  {
+    directTo: "/sales",
+    icons: <ArrowTrendingLines24Regular />,
+    text: "Sales"
   }
 ];
 
