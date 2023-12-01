@@ -5,6 +5,7 @@ import { useQuery, UseQueryResult } from "react-query";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../configs/firebase-config";
 import { DataRequest as MenuSchema } from "../types/types";
+import type { Item as MenuRowsItem } from "../components/tables/TableMenu";
 
 type DocMenuResponse = {
   list_menu: MenuSchema[];
@@ -33,8 +34,8 @@ type MenuInitialCtx = {
   setMenuData: TSetStates<MenuState | null>;
   formUtilities: UseFormReturn<AddNewMenuForm, any, undefined>;
   menuDataQ: UseQueryResult<DocMenuResponse[] | undefined, unknown>;
-  deletingMenus: MenuSchema[];
-  setDeletingMenus: TSetStates<MenuSchema[]>;
+  deletingMenus: MenuRowsItem[];
+  setDeletingMenus: TSetStates<MenuRowsItem[]>;
 };
 
 const MenuContext = createContext({} as MenuInitialCtx);
@@ -45,7 +46,9 @@ type PropsMenuProvider = {
 
 const MenuProvider: React.FC<PropsMenuProvider> = ({ children }) => {
   const [menuData, setMenuData] = useState<MenuState | null>(null);
-  const [deletingMenus, setDeletingMenus] = useState<MenuSchema[]>([]);
+  const [deletingMenus, setDeletingMenus] = useState<MenuRowsItem[]>([]);
+
+  console.log(deletingMenus);
 
   const formUtilities = useForm<AddNewMenuForm>({
     defaultValues: {

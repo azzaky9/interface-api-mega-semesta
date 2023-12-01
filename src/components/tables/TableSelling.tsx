@@ -327,7 +327,9 @@ export const TableSelling: React.FC<Props> = (props) => {
     };
   });
 
-  const getAllDocId = rows.map((row) => row.item.docId.value)
+  const getAllDocId = React.useMemo(() => {
+    return rows.map((row) => row.item.docId.value)
+  }, [collectionDeletes])
 
   const toggleAllKeydown = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {

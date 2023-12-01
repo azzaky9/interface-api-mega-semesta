@@ -59,7 +59,8 @@ const OrderProvider: React.FC<TPropOrderProvider> = ({ children }) => {
 
   const dataOrderQ = useQuery({
     queryKey: "order-list",
-    queryFn: getOrderData
+    queryFn: getOrderData,
+    staleTime: 60 * 1000 * 5 
   });
 
   console.log(dataOrderQ.data)

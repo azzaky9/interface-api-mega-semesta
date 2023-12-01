@@ -18,6 +18,7 @@ export default function MenuScreen() {
   const { handleOpen, isOpen, handleClose } = modalUtils;
 
   const [search, setSearch] = React.useState("");
+  const defferedValue = React.useDeferredValue(search)
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value as string);
@@ -38,7 +39,9 @@ export default function MenuScreen() {
           customSize='w-[360px]'
         />
         <ControlMenu {...controlMenuProps} />
-        <TableMenu searchTerm={search} />
+        <React.Suspense fallback={<p>Loading...</p>} >
+          <TableMenu searchTerm={defferedValue} />
+        </React.Suspense>
       </div>
     </>
   );

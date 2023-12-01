@@ -7,6 +7,7 @@ import menuHotelsJson from "../assets/menu_hotel.json";
 import { Category, MenuEditableSchema, useMenu } from "../context/MenuContext";
 import { useAlert } from "../context/ToastContext";
 import { useState } from "react";
+import useCurrency from "./useCurrency";
 
 type RequestRequirementArg = {
   insertType: Category;
@@ -25,6 +26,8 @@ const useInputMenu = () => {
 
   const { menuData, setMenuData, menuDataQ } = useMenu();
   const { notifyBasicAlert } = useAlert();
+  const { deletingMenus, setDeletingMenus } = useMenu()
+  const { formatToNumber } = useCurrency()
 
   const generateUniqueId = () => {
     const uid = uuid().split("-")[0];
@@ -81,12 +84,18 @@ const useInputMenu = () => {
     mutationKey: ["delete-menu"],
     mutationFn: async () => {
       try {
-        const selectionMenu = getSelectionMenu();
+        if (deletingMenus.length === 0) return
 
-        for (let index = 0; index < selectionMenu.length; index++) {
-          const dataToDelete = selectionMenu[index];
+        for (let index = 0; index < deletingMenus.length; index++) {
+          const dataToDelete = deletingMenus[index];
 
-          deleteMenuByCategory(dataToDelete);
+          deleteMenuByCategory({
+            category: dataToDelete.category.label,
+            groupMenu: dataToDelete.groupMenu.label,
+            id: dataToDelete.id,
+            name: dataToDelete.name.label,
+            price: formatToNumber(dataToDelete.price.label)
+          });
         }
 
         menuDataQ.refetch();
@@ -95,6 +104,8 @@ const useInputMenu = () => {
           message: "Complete to delete.",
           notifType: "success"
         });
+
+        setDeletingMenus([])
       } catch (error) {
         notifyBasicAlert({
           notifType: "error",

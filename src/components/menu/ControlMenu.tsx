@@ -91,12 +91,11 @@ type DeleteMenuFunction = {
 type Props = Partial<ToolbarProps & PropControlMenu & DeleteMenuFunction>;
 
 export const DefaultControl = (props: Props) => {
-  const { menuData, deleteMenu } = props;
+  const { deleteMenu } = props;
   const { resetAllSelection } = useInputMenu();
+  const { deletingMenus, setDeletingMenus } = useMenu()
 
-  const getTotalSelection = menuData
-    ? menuData.nodes.filter((item) => item.isSelect).length
-    : 0;
+  const getTotalSelection = deletingMenus.length
 
   const createDeleteIndicator =
     getTotalSelection === 0 ? (
@@ -152,7 +151,7 @@ export const DefaultControl = (props: Props) => {
             </MenuItem>
             <MenuItem
               icon={<ArrowSync24Regular />}
-              onClick={resetAllSelection}
+              onClick={() => setDeletingMenus([])}
             >
               Reset Selection
             </MenuItem>
