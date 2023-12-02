@@ -92,7 +92,6 @@ type Props = Partial<ToolbarProps & PropControlMenu & DeleteMenuFunction>;
 
 export const DefaultControl = (props: Props) => {
   const { deleteMenu } = props;
-  const { resetAllSelection } = useInputMenu();
   const { deletingMenus, setDeletingMenus } = useMenu()
 
   const getTotalSelection = deletingMenus.length
