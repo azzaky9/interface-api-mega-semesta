@@ -6,6 +6,7 @@ import DashboardScreen from "./components/screen/DashboardScreen";
 import AuthScreen from "./components/screen/AuthScreen";
 import { AuthProvider } from "./context/AuthContext";
 import SalesScreen from "./components/screen/SalesScreen";
+import StockScreen from "./components/screen/StockScreen";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
             />
             <Route
               path='/stock'
-              element={<p>stock</p>}
+              element={<StockScreen />}
             />
             <Route
               path='/menu'

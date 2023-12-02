@@ -328,25 +328,25 @@ export const TableSelling: React.FC<Props> = (props) => {
   });
 
   const getAllDocId = React.useMemo(() => {
-    return rows.map((row) => row.item.docId.value)
-  }, [collectionDeletes])
+    return rows.map((row) => row.item.docId.value);
+  }, [collectionDeletes]);
 
   const toggleAllKeydown = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key === " ") {
         toggleAllRows(e);
-        setSelectedDelete(getAllDocId)
+        setSelectedDelete(getAllDocId);
         e.preventDefault();
       }
     },
     [toggleAllRows]
   );
 
-  const toggleAllItems = (e:  React.SyntheticEvent<Element, Event>) => {
-    toggleAllRows(e)
+  const toggleAllItems = (e: React.SyntheticEvent<Element, Event>) => {
+    toggleAllRows(e);
 
-    setSelectedDelete(getAllDocId)
-  }
+    setSelectedDelete(getAllDocId);
+  };
 
   const headerCells: string[] = [
     "Nama",
