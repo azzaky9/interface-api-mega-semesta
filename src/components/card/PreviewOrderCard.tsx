@@ -48,7 +48,7 @@ export default function PreviewOrderCard() {
     if (!isAlreadySave) {
       await insertOrder.mutateAsync(createRequired);
 
-      orderDataQ.refetch()
+      orderDataQ.refetch();
     } else {
       notifyBasicAlert({ message: "Data already exist", notifType: "error" });
     }
@@ -77,6 +77,15 @@ export default function PreviewOrderCard() {
 }
 
 function MenuListPrintOption() {
+
+  
+  const getPort = async () => {
+    // @ts-ignore
+    const port = await window.navigator.serial.requestPort();
+
+    console.log(port);
+  };
+
   return (
     <Menu>
       <MenuTrigger>
@@ -92,7 +101,7 @@ function MenuListPrintOption() {
         <MenuList>
           <MenuGroup>
             <MenuGroupHeader className='text-sm'>Opsi Print</MenuGroupHeader>
-            <MenuItem icon={<PersonRegular />}> Customer</MenuItem>
+            <MenuItem icon={<PersonRegular />} onClick={getPort}> Customer</MenuItem>
             <MenuItem icon={<FoodRegular />}> Kitchen</MenuItem>
           </MenuGroup>
         </MenuList>
