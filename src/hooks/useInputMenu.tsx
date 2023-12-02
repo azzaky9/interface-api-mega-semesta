@@ -60,18 +60,6 @@ const useInputMenu = () => {
     }
   });
 
-  const getSelectionMenu = () => {
-    const selections = menuData?.nodes.map((node) => {
-      const { category, groupMenu, id, name, price, isSelect } = node;
-
-      if (isSelect) {
-        return { category, groupMenu, id, name, price };
-      }
-    }) as DataRequest[];
-
-    return selections.filter((selection) => selection);
-  };
-
   const deleteMenuByCategory = async (data: DataRequest) => {
     const docRef = doc(db, "menu_collection", data.category);
 
