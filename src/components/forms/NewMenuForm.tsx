@@ -16,7 +16,7 @@ import { AddSquareRegular } from "@fluentui/react-icons";
 import { X } from "lucide-react";
 
 const categories = ["foods", "baverage", "rokok", "store", "etc"];
-const groupMenu = ["Incharge", "Tamu Hotel"];
+const groupMenu = ["Incharge", "Tamu Hotel", "Gelora"];
 
 type Props = {
   handleClose: () => void;

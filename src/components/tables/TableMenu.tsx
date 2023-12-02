@@ -140,6 +140,16 @@ const MainTable: React.FC<TPropsMainTable> = ({ filterBy }) => {
     return deletingMenus.some((menu) => menu.id === itemToSearch.id);
   };
 
+  const toggleAll = (e: React.SyntheticEvent<Element, Event>) => {
+    if (allRowsSelected) {
+      setDeletingMenus([]);
+    } else {
+      setDeletingMenus(rows.map((row) => row.item));
+    }
+
+    toggleAllRows(e);
+  };
+
   const rows = getRows((row) => {
     const selected = isRowSelected(row.rowId);
     const insideDeleting = hasIdInsideDeleting(row.item);
@@ -188,7 +198,7 @@ const MainTable: React.FC<TPropsMainTable> = ({ filterBy }) => {
             checked={
               allRowsSelected ? true : someRowsSelected ? "mixed" : false
             }
-            onClick={toggleAllRows}
+            onClick={toggleAll}
             onKeyDown={toggleAllKeydown}
             checkboxIndicator={{ "aria-label": "Select all rows " }}
           />

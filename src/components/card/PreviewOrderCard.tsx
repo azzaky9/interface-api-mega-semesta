@@ -82,7 +82,8 @@ function MenuListPrintOption() {
   const getPort = async () => {
     // @ts-ignore
     const port = await window.navigator.serial.requestPort();
-
+    await port.open({ baudRate: 9600 })
+    
     console.log(port);
   };
 
