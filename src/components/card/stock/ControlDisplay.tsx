@@ -1,6 +1,5 @@
-import moment from "moment";
 import React, { ChangeEvent } from "react";
-import { DatePickerInput, Period } from "../../input/dates/DatePicker";
+import { Period } from "../../input/dates/DatePicker";
 import { Button } from "@fluentui/react-components";
 import { CalendarWeekNumbersRegular } from "@fluentui/react-icons";
 import { RangeOption } from "../../input/dates/DatePicker";
@@ -16,12 +15,11 @@ type Period = {
 const rangeOption: RangeOption[] = ["Month", "Day", "Week", "WorkWeek"];
 
 export default function ControlDisplay() {
-  const [date, setDate] = React.useState<DefaultValue>(moment().toDate());
   const [rangeBy, setRangeBy] = React.useState<RangeOption>("Month");
-  const [period, setPeriod] = React.useState<Period>({
-    from: null,
-    to: null
-  });
+  // const [period, setPeriod] = React.useState<Period>({
+  //   from: null,
+  //   to: null
+  // });
 
   const handleRangeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setRangeBy(e.target.value as RangeOption);

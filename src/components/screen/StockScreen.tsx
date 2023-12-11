@@ -1,4 +1,3 @@
-import React from "react";
 import TableStock from "../tables/TableStock";
 import ControlDisplay from "../card/stock/ControlDisplay";
 

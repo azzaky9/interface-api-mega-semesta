@@ -14,19 +14,9 @@ import {
   TableBody,
   TableHeaderCell,
   TableCell,
-  Button,
   Tooltip
 } from "@fluentui/react-components";
-import ReactPaginate from "react-paginate";
-import { FixedSizeList as List } from "react-window";
-import {
-  DownloadTableExcel,
-  useDownloadExcel
-} from "react-export-table-to-excel";
 import Pagination from "./Pagination";
-import moment from "moment";
-import ControlDisplay from "../card/stock/ControlDisplay";
-import { DatePickerInput } from "../input/dates/DatePicker";
 
 type StockDefinition = {
   name: string;
@@ -234,19 +224,17 @@ const resolveAsset = (asset: string) => {
 };
 
 const excelLogo = resolveAsset("xlsx.png");
-const wordLogo = resolveAsset("docx.png");
-const powerpointLogoURL = resolveAsset("pptx.png");
 
 export default function TableStock() {
-  const [data, setData] = React.useState(() => [...defaultData]);
+  const [data, _setData] = React.useState(() => [...defaultData]);
 
   const tableRef = React.useRef<HTMLTableElement | null>(null);
 
-  const { onDownload } = useDownloadExcel({
-    currentTableRef: tableRef.current,
-    filename: "test_sheet",
-    sheet: "sheet"
-  });
+  // const { onDownload } = useDownloadExcel({
+  //   currentTableRef: tableRef.current,
+  //   filename: "test_sheet",
+  //   sheet: "sheet"
+  // });
 
   const table = useReactTable({
     data,

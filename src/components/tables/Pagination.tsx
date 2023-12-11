@@ -1,9 +1,6 @@
 import { Button } from "@fluentui/react-components";
 import {
-  ChevronCircleLeft24Regular,
-  ChevronLeft12Regular,
   ChevronLeft16Regular,
-  ChevronLeft24Regular,
   ChevronRight16Regular
 } from "@fluentui/react-icons";
 import { useState } from "react";
@@ -13,9 +10,9 @@ type Props = {
   itemsPerPage: number;
 };
 
-type ItemProps = {
-  currentItems: number;
-};
+// type ItemProps = {
+//   currentItems: number;
+// };
 
 type NextPrevProps = {
   direction: "prev" | "next";
@@ -37,8 +34,6 @@ function Pagination({ itemsPerPage }: Props) {
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
   console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-  const currentItems = [].slice(itemOffset, endOffset);
-  const pageCount = Math.ceil([].length / itemsPerPage);
 
   // Invoke when user click to request another page.
 
@@ -48,7 +43,7 @@ function Pagination({ itemsPerPage }: Props) {
         breakLabel='...'
         className="flex list-none "
         nextLabel={<NextPrevButton direction="next" />}
-        onPageChange={() => console.log("click")}
+        onPageChange={() => setItemOffset(itemOffset + 1)}
         pageRangeDisplayed={5}
         pageCount={10}
         pageLabelBuilder={(page) => <Button icon={page} size="small" appearance="transparent" className="rounded-none" />}
