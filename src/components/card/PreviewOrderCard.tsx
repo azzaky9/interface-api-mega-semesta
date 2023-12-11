@@ -20,6 +20,10 @@ import {
   PersonRegular,
   ReceiptRegular
 } from "@fluentui/react-icons";
+import { useMutation } from "react-query";
+import { url } from "../../constant/constants";
+import axios from "axios";
+import { PostReceipt } from "../../types/types";
 import { useAlert } from "../../context/ToastContext";
 
 export default function PreviewOrderCard() {
@@ -77,15 +81,54 @@ export default function PreviewOrderCard() {
 }
 
 function MenuListPrintOption() {
+  const { state } = useOrder();
+  const { notifyBasicAlert } = useAlert();
 
-  
-  const getPort = async () => {
-    // @ts-ignore
-    const port = await window.navigator.serial.requestPort();
-    await port.open({ baudRate: 9600 })
-    
-    console.log(port);
+  console.log(state.orderList);
+
+  type PrintOption = "kitchen" | "customer";
+
+  const getIncluded = (type: PrintOption): PostReceipt["include"] => {
+    if (type === "kitchen") {
+      return {
+        price: true,
+        subtotal: true,
+        total: true
+      };
+    } else {
+      return { ignoreAll: true };
+    }
   };
+
+  const createReceipt = useMutation({
+    mutationKey: ["post-receipt"],
+    mutationFn: async (type: PrintOption) => {
+      try {
+        const requestBody: PostReceipt = {
+          data: state.orderList,
+          include: getIncluded(type)
+        };
+
+        const response = await axios.post(`${url}/receipt`, requestBody);
+
+        console.log(response);
+
+        notifyBasicAlert({ notifType: "success", message: "success to print" });
+      } catch (error) {
+        notifyBasicAlert({
+          notifType: "error",
+          message: "error occured check the console."
+        });
+
+        console.log(error);
+      }
+    }
+  });
+
+  const customerReceipt = async () =>
+    await createReceipt.mutateAsync("customer");
+
+  const kitchenReceipt = async () => await createReceipt.mutateAsync("kitchen");
 
   return (
     <Menu>
@@ -102,8 +145,20 @@ function MenuListPrintOption() {
         <MenuList>
           <MenuGroup>
             <MenuGroupHeader className='text-sm'>Opsi Print</MenuGroupHeader>
-            <MenuItem icon={<PersonRegular />} onClick={getPort}> Customer</MenuItem>
-            <MenuItem icon={<FoodRegular />}> Kitchen</MenuItem>
+            <MenuItem
+              icon={<PersonRegular />}
+              onClick={customerReceipt}
+            >
+              {" "}
+              Customer
+            </MenuItem>
+            <MenuItem
+              icon={<FoodRegular />}
+              onClick={kitchenReceipt}
+            >
+              {" "}
+              Kitchen
+            </MenuItem>
           </MenuGroup>
         </MenuList>
       </MenuPopover>

@@ -30,6 +30,18 @@ type TSetStates<T> = Dispatch<SetStateAction<T>>;
 
 type OrderList = Order[];
 
+type OptionalIncluded = {
+  price?: boolean,
+  subtotal?: boolean,
+  total?: boolean,
+  ignoreAll?: boolean
+}
+
+type PostReceipt = {
+  data: OrderList,
+  include: OptionalIncluded
+}
+
 interface ReducerInitialState {
   customer: Customer;
   orderList: OrderList;
@@ -44,5 +56,6 @@ export type {
   TSetStates,
   ReducerInitialState,
   DataRequest,
-  Admin
+  Admin,
+  PostReceipt
 };

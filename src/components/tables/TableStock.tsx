@@ -1,9 +1,10 @@
 import * as React from "react";
-
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
   useReactTable
 } from "@tanstack/react-table";
 import {
@@ -12,13 +13,20 @@ import {
   TableRow,
   TableBody,
   TableHeaderCell,
-  TableCell
+  TableCell,
+  Button,
+  Tooltip
 } from "@fluentui/react-components";
+import ReactPaginate from "react-paginate";
 import { FixedSizeList as List } from "react-window";
 import {
   DownloadTableExcel,
   useDownloadExcel
 } from "react-export-table-to-excel";
+import Pagination from "./Pagination";
+import moment from "moment";
+import ControlDisplay from "../card/stock/ControlDisplay";
+import { DatePickerInput } from "../input/dates/DatePicker";
 
 type StockDefinition = {
   name: string;
@@ -218,6 +226,17 @@ const columns = [
   })
 ];
 
+const resolveAsset = (asset: string) => {
+  const ASSET_URL =
+    "https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/assets/";
+
+  return `${ASSET_URL}${asset}`;
+};
+
+const excelLogo = resolveAsset("xlsx.png");
+const wordLogo = resolveAsset("docx.png");
+const powerpointLogoURL = resolveAsset("pptx.png");
+
 export default function TableStock() {
   const [data, setData] = React.useState(() => [...defaultData]);
 
@@ -232,14 +251,16 @@ export default function TableStock() {
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel()
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel()
   });
 
   console.log(tableRef.current);
 
   return (
     <div className='bg-white h-[82vh] flex flex-col justify-between'>
-      <div className='p-2 bg-white w-full'>
+      <div className='p-2 bg-white'>
         <Table
           as='table'
           ref={tableRef}
@@ -280,8 +301,16 @@ export default function TableStock() {
           </TableBody>
         </Table>
       </div>
-      <div className='py-4'>
-        <button onClick={onDownload}>Export To Excel</button>
+      <div className='pb-4 flex  items-center  gap-3'>
+        <Pagination itemsPerPage={10} />
+        <Tooltip
+          content='Import to Excel'
+          relationship='label'
+        >
+          <div className='cursor-pointer'>
+            <img src={excelLogo} />
+          </div>
+        </Tooltip>
       </div>
     </div>
   );
