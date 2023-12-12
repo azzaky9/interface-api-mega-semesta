@@ -125,8 +125,11 @@ function MenuListPrintOption() {
     }
   });
 
-  const customerReceipt = async () =>
-    await createReceipt.mutateAsync("customer");
+  const customerReceipt = async () => {
+    // @ts-ignore
+    const port = await window.navigator.serial.requestPort();
+    await port.open({ baudRate: 9600 });
+  };
 
   const kitchenReceipt = async () => await createReceipt.mutateAsync("kitchen");
 
