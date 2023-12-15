@@ -26,7 +26,9 @@ import {
   HomePersonRegular,
   MoneyRegular,
   PersonArrowRightRegular,
-  PersonLockRegular
+  PersonLockRegular,
+  AddCircle16Filled,
+  Timer16Filled
 } from "@fluentui/react-icons";
 import useCurrency from "../../hooks/useCurrency";
 import ApprovePayment from "../service/ApprovePayment";
@@ -107,6 +109,14 @@ const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
       label: "Pembelian hotel",
       icon: <HomePersonRegular />
     }
+  };
+
+  const getLabelOfPayStatus = (status: Item["payedAt"]["status"]) => {
+    return status === "success" ? (
+      <AddCircle16Filled className='text-green-900' />
+    ) : (
+      <Timer16Filled className='text-yellow-600' />
+    );
   };
 
   return (
@@ -198,7 +208,15 @@ const RenderRow = ({ index, style, data }: ReactWindowRenderFnProps) => {
         </TableCellLayout>
       </TableCell>
       <TableCell>
-        <span>{item.amount.label}</span>
+        <span
+          className={`${
+            item.payedAt.status === "pending"
+              ? "text-yellow-600"
+              : "text-green-700"
+          } font-bold`}
+        >
+          {item.amount.label} {getLabelOfPayStatus(item.payedAt.status)}
+        </span>
       </TableCell>
     </TableRow>
   );
