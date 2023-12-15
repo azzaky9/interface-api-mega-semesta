@@ -1,4 +1,4 @@
-
+import { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -7,10 +7,11 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { faker } from "@faker-js/faker"
+  Legend
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+import { faker } from "@faker-js/faker";
+import moment from "moment"
 
 ChartJS.register(
   CategoryScale,
@@ -22,40 +23,65 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Line Chart',
-    },
-  },
-};
-
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
-
 export function SalesChart() {
-  return <Line options={options} data={data} />;
+  const [previousMonths, setPreviousMonths] = useState<string[]>([]);
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const
+      },
+      title: {
+        display: true,
+        text: `Grafik penjualan bulanan ${previousMonths[0]} - ${
+          previousMonths.at(-1) 
+        } ${moment().format("YYYY")} `
+      }
+    }
+  };
+
+  const calculatePreviousMonths = () => {
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const months = [];
+
+    for (let i = 0; i <= currentMonth; i++) {
+      const previousMonth = new Date(today.getFullYear(), i, 1);
+      months.push(
+        previousMonth.toLocaleString("default", {
+          month: "long"
+        })
+      );
+    }
+
+    setPreviousMonths(months);
+  };
+
+  const data = {
+    labels: previousMonths,
+    datasets: [
+      {
+        label: "Penjualan",
+        data: previousMonths.map(() =>
+          faker.number.int({ min: -1000, max: 1000 })
+        ),
+        borderColor: "#2563eb",
+        backgroundColor: "#2563eb"
+      }
+    ]
+  };
+
+  useEffect(() => {
+    calculatePreviousMonths();
+  }, []);
+
+  console.log(previousMonths);
+
+  return (
+    <Line
+      options={options}
+      data={data}
+    />
+  );
 }

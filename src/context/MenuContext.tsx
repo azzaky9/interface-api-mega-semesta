@@ -48,16 +48,12 @@ const MenuProvider: React.FC<PropsMenuProvider> = ({ children }) => {
   const [menuData, setMenuData] = useState<MenuState | null>(null);
   const [deletingMenus, setDeletingMenus] = useState<MenuRowsItem[]>([]);
 
-  console.log(deletingMenus);
-
   const formUtilities = useForm<AddNewMenuForm>({
     defaultValues: {
       category: "foods",
       groupMenu: "Incharge"
     }
   });
-
-  console.log(menuData);
 
   const menuDataQ = useQuery({
     queryKey: ["list-menu"],

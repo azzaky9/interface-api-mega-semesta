@@ -49,7 +49,6 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const navigate = useNavigate();
 
-  console.log(adminProfiles)
 
   const getAdminProfiles = async (uid: string) => {
     try {
