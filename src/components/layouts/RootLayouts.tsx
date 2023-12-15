@@ -19,7 +19,7 @@ export default function RootLayouts() {
   }
 
   return (
-    <div className='flex flex-row w-full h-screen'>
+    <div className='flex flex-row w-full min-h-screen'>
       {!isLocationAuth ? <Sidebar /> : null}
       <main className='relative w-full bg-gray-100  '>
         {!isLocationAuth ? <Profiles /> : null}
