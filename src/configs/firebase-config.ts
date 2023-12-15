@@ -3,14 +3,12 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAfYuTwzggJQX3kGShVuACzGOZjOuBFYU4",
-  authDomain: "kitchen-managements.firebaseapp.com",
-  databaseURL:
-    "https://kitchen-managements-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "kitchen-managements",
-  storageBucket: "kitchen-managements.appspot.com",
-  messagingSenderId: "215808846626",
-  appId: "1:215808846626:web:dcb4fcf321317c8627937b"
+  apiKey: "AIzaSyBUDVxG__jVAQPx9BB407xP2U5F_ihxSyE",
+  authDomain: "auth-pt-mega-semesta.firebaseapp.com",
+  projectId: "auth-pt-mega-semesta",
+  storageBucket: "auth-pt-mega-semesta.appspot.com",
+  messagingSenderId: "145547141290",
+  appId: "1:145547141290:web:47e9b391b73bf2cbc0b0d3"
 };
 
 const app = initializeApp(firebaseConfig);
