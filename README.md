@@ -1,4 +1,4 @@
-# Kitchen Management MICC
+# STOCK AND APPROVE TRACKING
 
 Goals
 
