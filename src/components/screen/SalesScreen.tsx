@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
 import { Receipt24Regular } from "@fluentui/react-icons";
 import { SalesChart } from "../pos/SalesChart";
 import { Props as BannerProps } from "../pos/SalesBanner";
 import SalesBanner from "../pos/SalesBanner";
-import moment from "moment";
 import useModal from "../../hooks/useModal";
 import Modal from "../modal/Modal";
 
